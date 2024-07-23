@@ -1,9 +1,9 @@
 import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
-import 'package:scribble/src/view/painting/sketch_line_path_mixin.dart';
+import 'package:scribble/src/view/painting/canvas_draw_sketch_line_extension.dart';
 
 /// A painter for drawing a scribble sketch.
-class ScribblePainter extends CustomPainter with SketchLinePathMixin {
+class ScribblePainter extends CustomPainter {
   /// Creates a new [ScribblePainter] instance.
   ScribblePainter({
     required this.sketch,
@@ -17,23 +17,19 @@ class ScribblePainter extends CustomPainter with SketchLinePathMixin {
   /// {@macro view.state.scribble_state.scale_factor}
   final double scaleFactor;
 
-  @override
+  /// {@macro scribble.simulate_pressure}
   final bool simulatePressure;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
-
     for (var i = 0; i < sketch.lines.length; ++i) {
-      final path = getPathForLine(
+      // TODO: Currently at every paint call, ALL the paths are redrawn.
+      // Look at canvas.saveLayer/.save/.restore to optimize this.
+      canvas.drawSketchLine(
         sketch.lines[i],
         scaleFactor: scaleFactor,
+        simulatePressure: simulatePressure,
       );
-      if (path == null) {
-        continue;
-      }
-      paint.color = Color(sketch.lines[i].color);
-      canvas.drawPath(path, paint);
     }
   }
 

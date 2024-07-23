@@ -3,22 +3,20 @@ import 'dart:ui';
 import 'package:perfect_freehand/perfect_freehand.dart' as pf;
 import 'package:scribble/src/domain/model/sketch/sketch.dart';
 
-/// A mixin for generating a [Path] from a [SketchLine].
+/// An extension for generating a [Path] from a [SketchLine].
 ///
-/// Provides the method [getPathForLine] which generates a smooth [Path] from a
+/// Provides the method [getPath] which generates a smooth [Path] from a
 /// [SketchLine].
-mixin SketchLinePathMixin {
-  /// {@macro scribble.simulate_pressure}
-  bool get simulatePressure;
-
+extension SketchLinePath on SketchLine {
   /// Generates a [Path] from a [SketchLine].
   ///
   /// The [scaleFactor] is used to scale the line width.
   ///
   /// If [simulatePressure] is true, the line will be drawn as if it had
   /// pressure information, if all its points have the same pressure.
-  Path? getPathForLine(
+  Path? getPath(
     SketchLine line, {
+    required bool simulatePressure,
     double scaleFactor = 1.0,
   }) {
     final needSimulate = simulatePressure &&

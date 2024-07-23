@@ -1,13 +1,14 @@
 import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
+import 'package:scribble/src/view/painting/canvas_draw_sketch_line_extension.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
-import 'package:scribble/src/view/painting/sketch_line_path_mixin.dart';
+import 'package:scribble/src/view/painting/tools_paint_style.dart';
 
 /// {@template scribble_editing_painter}
 /// A painter for drawing the currently active line of a scribble sketch, as
 /// well as the pointer when in drawing or erasing mode, if desired.
 /// {@endtemplate}
-class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
+class ScribbleEditingPainter extends CustomPainter {
   /// {@macro scribble_editing_painter}
   ScribbleEditingPainter({
     required this.state,
@@ -30,30 +31,29 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
   /// The pointer will be drawn as a transparent circle with a black border.
   final bool drawEraser;
 
-  @override
+  /// {@macro scribble.simulate_pressure}
   final bool simulatePressure;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
-
     final activeLine = state.map(
       drawing: (s) => s.activeLine,
       erasing: (_) => null,
     );
+
+    final paint = activeLine?.paintForTool ?? Paint();
+
     if (activeLine != null) {
-      final path = getPathForLine(
+      canvas.drawSketchLine(
         activeLine,
         scaleFactor: state.scaleFactor,
+        simulatePressure: simulatePressure,
       );
-      if (path != null) {
-        paint.color = Color(activeLine.color);
-        canvas.drawPath(path, paint);
-      }
     }
 
     if (state.pointerPosition != null &&
         (state is Drawing && drawPointer || state is Erasing && drawEraser)) {
+      // TODO: Adjust the pointer preview based on the current tool
       paint
         ..style = state.map(
           drawing: (_) => PaintingStyle.fill,
