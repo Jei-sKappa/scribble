@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:scribble/src/domain/model/sketch_line/sketch_line.dart';
 import 'package:scribble/src/domain/model/tool/tool.dart';
 
 Paint get _defaultPaint => Paint()..style = PaintingStyle.fill;
@@ -25,19 +24,21 @@ Paint get _seeThroughtTapePaint => Paint()
   ..strokeWidth = 4.0
   ..strokeCap = StrokeCap.square;
 
-/// Extension on [SketchLine] to get the paint for the line.
-extension SketchLineToolPaint on SketchLine {
+/// Extension on [Tool] to get the paint for the line.
+extension ToolPaint on Tool {
   /// Returns the paint for the line based on the tool and color.
-  Paint get paintForTool {
+  Paint getPaint({
+    required Color color,
+  }) {
     late Paint paint;
-    switch (tool) {
+    switch (this) {
       case Tool.pen:
-        paint = _penPaint..color = Color(color);
+        paint = _penPaint..color = color;
       case Tool.highlighter:
-        paint = _highlighterPaint..color = Color(color).withOpacity(0.5);
+        paint = _highlighterPaint..color = color.withOpacity(0.5);
       case Tool.tape:
-        paint = _tapePaint..color = Color(color);
-      // paint = _seeThroughtTapePaint..color = Color(color);
+        paint = _tapePaint..color = color;
+      // paint = _seeThroughtTapePaint..color = color;
     }
 
     return paint;

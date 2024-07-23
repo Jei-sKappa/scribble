@@ -1,8 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
-import 'package:scribble/src/view/painting/canvas_draw_sketch_line_extension.dart';
-import 'package:scribble/src/view/painting/point_to_offset_x.dart';
-import 'package:scribble/src/view/painting/tools_paint_style.dart';
+import 'package:scribble/src/view/painting/canvas_scribble_drawings_extension.dart';
 
 /// {@template scribble_editing_painter}
 /// A painter for drawing the currently active line of a scribble sketch, as
@@ -41,8 +39,6 @@ class ScribbleEditingPainter extends CustomPainter {
       erasing: (_) => null,
     );
 
-    final paint = activeLine?.paintForTool ?? Paint();
-
     if (activeLine != null) {
       canvas.drawSketchLine(
         activeLine,
@@ -51,24 +47,14 @@ class ScribbleEditingPainter extends CustomPainter {
       );
     }
 
+    // Draw the pointer if the pointer is in the canvas and the state is
+    // drawing with no line currently being drawn (no tapped down) or erasing.
     if (state.pointerPosition != null &&
-        (state is Drawing && drawPointer || state is Erasing && drawEraser)) {
-      // TODO: Adjust the pointer preview based on the current tool
-      paint
-        ..style = state.map(
-          drawing: (_) => PaintingStyle.fill,
-          erasing: (_) => PaintingStyle.stroke,
-        )
-        ..color = state.map(
-          drawing: (s) => Color(s.selectedColor),
-          erasing: (s) => const Color(0xFF000000),
-        )
-        ..strokeWidth = 1;
-      canvas.drawCircle(
-        state.pointerPosition!.asOffset,
-        state.selectedWidth / state.scaleFactor,
-        paint,
-      );
+        ((state is Drawing &&
+                drawPointer &&
+                (state as Drawing).activeLine == null) ||
+            state is Erasing && drawEraser)) {
+      canvas.drawPointerPreview(state);
     }
   }
 

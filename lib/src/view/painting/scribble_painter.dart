@@ -1,6 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
-import 'package:scribble/src/view/painting/canvas_draw_sketch_line_extension.dart';
+import 'package:scribble/src/view/painting/canvas_scribble_drawings_extension.dart';
 
 /// A painter for drawing a scribble sketch.
 class ScribblePainter extends CustomPainter {
