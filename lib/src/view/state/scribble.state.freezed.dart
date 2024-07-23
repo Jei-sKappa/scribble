@@ -55,11 +55,16 @@ mixin _$ScribbleState {
   /// {@endtemplate}
   double get scaleFactor => throw _privateConstructorUsedError;
 
+  /// {@template view.state.scribble_state.simplification_tolerance}
   /// The current tolerance of simplification, in pixels.
   ///
   /// Lines will be simplified when they are finished. A value of 0 (default)
   /// will mean no simplification.
+  /// {@endtemplate}
   double get simplificationTolerance => throw _privateConstructorUsedError;
+
+  /// The currently selected tool
+  Tool get selectedTool => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -71,7 +76,8 @@ mixin _$ScribbleState {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            Tool selectedTool)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -80,7 +86,8 @@ mixin _$ScribbleState {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            Tool selectedTool)
         erasing,
   }) =>
       throw _privateConstructorUsedError;
@@ -95,7 +102,8 @@ mixin _$ScribbleState {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -104,7 +112,8 @@ mixin _$ScribbleState {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         erasing,
   }) =>
       throw _privateConstructorUsedError;
@@ -119,7 +128,8 @@ mixin _$ScribbleState {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -128,7 +138,8 @@ mixin _$ScribbleState {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         erasing,
     required TResult orElse(),
   }) =>
@@ -171,7 +182,8 @@ abstract class $ScribbleStateCopyWith<$Res> {
       Point? pointerPosition,
       double selectedWidth,
       double scaleFactor,
-      double simplificationTolerance});
+      double simplificationTolerance,
+      Tool selectedTool});
 
   $SketchCopyWith<$Res> get sketch;
   $PointCopyWith<$Res>? get pointerPosition;
@@ -197,6 +209,7 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
     Object? selectedWidth = null,
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
+    Object? selectedTool = null,
   }) {
     return _then(_value.copyWith(
       sketch: null == sketch
@@ -227,6 +240,10 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
           ? _value.simplificationTolerance
           : simplificationTolerance // ignore: cast_nullable_to_non_nullable
               as double,
+      selectedTool: null == selectedTool
+          ? _value.selectedTool
+          : selectedTool // ignore: cast_nullable_to_non_nullable
+              as Tool,
     ) as $Val);
   }
 
@@ -268,7 +285,8 @@ abstract class _$$DrawingImplCopyWith<$Res>
       int selectedColor,
       double selectedWidth,
       double scaleFactor,
-      double simplificationTolerance});
+      double simplificationTolerance,
+      Tool selectedTool});
 
   @override
   $SketchCopyWith<$Res> get sketch;
@@ -297,6 +315,7 @@ class __$$DrawingImplCopyWithImpl<$Res>
     Object? selectedWidth = null,
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
+    Object? selectedTool = null,
   }) {
     return _then(_$DrawingImpl(
       sketch: null == sketch
@@ -335,6 +354,10 @@ class __$$DrawingImplCopyWithImpl<$Res>
           ? _value.simplificationTolerance
           : simplificationTolerance // ignore: cast_nullable_to_non_nullable
               as double,
+      selectedTool: null == selectedTool
+          ? _value.selectedTool
+          : selectedTool // ignore: cast_nullable_to_non_nullable
+              as Tool,
     ));
   }
 
@@ -364,6 +387,7 @@ class _$DrawingImpl extends Drawing {
       this.selectedWidth = 5,
       this.scaleFactor = 1,
       this.simplificationTolerance = 0,
+      this.selectedTool = Tool.pen,
       final String? $type})
       : _activePointerIds = activePointerIds,
         $type = $type ?? 'drawing',
@@ -425,20 +449,27 @@ class _$DrawingImpl extends Drawing {
   @JsonKey()
   final double scaleFactor;
 
+  /// {@template view.state.scribble_state.simplification_tolerance}
   /// The current tolerance of simplification, in pixels.
   ///
   /// Lines will be simplified when they are finished. A value of 0 (default)
   /// will mean no simplification.
+  /// {@endtemplate}
   @override
   @JsonKey()
   final double simplificationTolerance;
+
+  /// The currently selected tool
+  @override
+  @JsonKey()
+  final Tool selectedTool;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'ScribbleState.drawing(sketch: $sketch, activeLine: $activeLine, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance)';
+    return 'ScribbleState.drawing(sketch: $sketch, activeLine: $activeLine, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool)';
   }
 
   @override
@@ -463,7 +494,9 @@ class _$DrawingImpl extends Drawing {
                 other.scaleFactor == scaleFactor) &&
             (identical(
                     other.simplificationTolerance, simplificationTolerance) ||
-                other.simplificationTolerance == simplificationTolerance));
+                other.simplificationTolerance == simplificationTolerance) &&
+            (identical(other.selectedTool, selectedTool) ||
+                other.selectedTool == selectedTool));
   }
 
   @JsonKey(ignore: true)
@@ -478,7 +511,8 @@ class _$DrawingImpl extends Drawing {
       selectedColor,
       selectedWidth,
       scaleFactor,
-      simplificationTolerance);
+      simplificationTolerance,
+      selectedTool);
 
   @JsonKey(ignore: true)
   @override
@@ -498,7 +532,8 @@ class _$DrawingImpl extends Drawing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            Tool selectedTool)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -507,7 +542,8 @@ class _$DrawingImpl extends Drawing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            Tool selectedTool)
         erasing,
   }) {
     return drawing(
@@ -519,7 +555,8 @@ class _$DrawingImpl extends Drawing {
         selectedColor,
         selectedWidth,
         scaleFactor,
-        simplificationTolerance);
+        simplificationTolerance,
+        selectedTool);
   }
 
   @override
@@ -534,7 +571,8 @@ class _$DrawingImpl extends Drawing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -543,7 +581,8 @@ class _$DrawingImpl extends Drawing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         erasing,
   }) {
     return drawing?.call(
@@ -555,7 +594,8 @@ class _$DrawingImpl extends Drawing {
         selectedColor,
         selectedWidth,
         scaleFactor,
-        simplificationTolerance);
+        simplificationTolerance,
+        selectedTool);
   }
 
   @override
@@ -570,7 +610,8 @@ class _$DrawingImpl extends Drawing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -579,7 +620,8 @@ class _$DrawingImpl extends Drawing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         erasing,
     required TResult orElse(),
   }) {
@@ -593,7 +635,8 @@ class _$DrawingImpl extends Drawing {
           selectedColor,
           selectedWidth,
           scaleFactor,
-          simplificationTolerance);
+          simplificationTolerance,
+          selectedTool);
     }
     return orElse();
   }
@@ -647,7 +690,8 @@ abstract class Drawing extends ScribbleState {
       final int selectedColor,
       final double selectedWidth,
       final double scaleFactor,
-      final double simplificationTolerance}) = _$DrawingImpl;
+      final double simplificationTolerance,
+      final Tool selectedTool}) = _$DrawingImpl;
   const Drawing._() : super._();
 
   factory Drawing.fromJson(Map<String, dynamic> json) = _$DrawingImpl.fromJson;
@@ -691,11 +735,17 @@ abstract class Drawing extends ScribbleState {
   double get scaleFactor;
   @override
 
+  /// {@template view.state.scribble_state.simplification_tolerance}
   /// The current tolerance of simplification, in pixels.
   ///
   /// Lines will be simplified when they are finished. A value of 0 (default)
   /// will mean no simplification.
+  /// {@endtemplate}
   double get simplificationTolerance;
+  @override
+
+  /// The currently selected tool
+  Tool get selectedTool;
   @override
   @JsonKey(ignore: true)
   _$$DrawingImplCopyWith<_$DrawingImpl> get copyWith =>
@@ -717,7 +767,8 @@ abstract class _$$ErasingImplCopyWith<$Res>
       Point? pointerPosition,
       double selectedWidth,
       double scaleFactor,
-      double simplificationTolerance});
+      double simplificationTolerance,
+      Tool selectedTool});
 
   @override
   $SketchCopyWith<$Res> get sketch;
@@ -743,6 +794,7 @@ class __$$ErasingImplCopyWithImpl<$Res>
     Object? selectedWidth = null,
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
+    Object? selectedTool = null,
   }) {
     return _then(_$ErasingImpl(
       sketch: null == sketch
@@ -773,6 +825,10 @@ class __$$ErasingImplCopyWithImpl<$Res>
           ? _value.simplificationTolerance
           : simplificationTolerance // ignore: cast_nullable_to_non_nullable
               as double,
+      selectedTool: null == selectedTool
+          ? _value.selectedTool
+          : selectedTool // ignore: cast_nullable_to_non_nullable
+              as Tool,
     ));
   }
 }
@@ -788,6 +844,7 @@ class _$ErasingImpl extends Erasing {
       this.selectedWidth = 5,
       this.scaleFactor = 1,
       this.simplificationTolerance = 0,
+      this.selectedTool = Tool.pen,
       final String? $type})
       : _activePointerIds = activePointerIds,
         $type = $type ?? 'erasing',
@@ -846,12 +903,17 @@ class _$ErasingImpl extends Erasing {
   @JsonKey()
   final double simplificationTolerance;
 
+  /// The currently selected tool
+  @override
+  @JsonKey()
+  final Tool selectedTool;
+
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'ScribbleState.erasing(sketch: $sketch, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance)';
+    return 'ScribbleState.erasing(sketch: $sketch, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool)';
   }
 
   @override
@@ -872,7 +934,9 @@ class _$ErasingImpl extends Erasing {
                 other.scaleFactor == scaleFactor) &&
             (identical(
                     other.simplificationTolerance, simplificationTolerance) ||
-                other.simplificationTolerance == simplificationTolerance));
+                other.simplificationTolerance == simplificationTolerance) &&
+            (identical(other.selectedTool, selectedTool) ||
+                other.selectedTool == selectedTool));
   }
 
   @JsonKey(ignore: true)
@@ -885,7 +949,8 @@ class _$ErasingImpl extends Erasing {
       pointerPosition,
       selectedWidth,
       scaleFactor,
-      simplificationTolerance);
+      simplificationTolerance,
+      selectedTool);
 
   @JsonKey(ignore: true)
   @override
@@ -905,7 +970,8 @@ class _$ErasingImpl extends Erasing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            Tool selectedTool)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -914,11 +980,19 @@ class _$ErasingImpl extends Erasing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            Tool selectedTool)
         erasing,
   }) {
-    return erasing(sketch, allowedPointersMode, activePointerIds,
-        pointerPosition, selectedWidth, scaleFactor, simplificationTolerance);
+    return erasing(
+        sketch,
+        allowedPointersMode,
+        activePointerIds,
+        pointerPosition,
+        selectedWidth,
+        scaleFactor,
+        simplificationTolerance,
+        selectedTool);
   }
 
   @override
@@ -933,7 +1007,8 @@ class _$ErasingImpl extends Erasing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -942,11 +1017,19 @@ class _$ErasingImpl extends Erasing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         erasing,
   }) {
-    return erasing?.call(sketch, allowedPointersMode, activePointerIds,
-        pointerPosition, selectedWidth, scaleFactor, simplificationTolerance);
+    return erasing?.call(
+        sketch,
+        allowedPointersMode,
+        activePointerIds,
+        pointerPosition,
+        selectedWidth,
+        scaleFactor,
+        simplificationTolerance,
+        selectedTool);
   }
 
   @override
@@ -961,7 +1044,8 @@ class _$ErasingImpl extends Erasing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -970,13 +1054,21 @@ class _$ErasingImpl extends Erasing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            Tool selectedTool)?
         erasing,
     required TResult orElse(),
   }) {
     if (erasing != null) {
-      return erasing(sketch, allowedPointersMode, activePointerIds,
-          pointerPosition, selectedWidth, scaleFactor, simplificationTolerance);
+      return erasing(
+          sketch,
+          allowedPointersMode,
+          activePointerIds,
+          pointerPosition,
+          selectedWidth,
+          scaleFactor,
+          simplificationTolerance,
+          selectedTool);
     }
     return orElse();
   }
@@ -1028,7 +1120,8 @@ abstract class Erasing extends ScribbleState {
       final Point? pointerPosition,
       final double selectedWidth,
       final double scaleFactor,
-      final double simplificationTolerance}) = _$ErasingImpl;
+      final double simplificationTolerance,
+      final Tool selectedTool}) = _$ErasingImpl;
   const Erasing._() : super._();
 
   factory Erasing.fromJson(Map<String, dynamic> json) = _$ErasingImpl.fromJson;
@@ -1069,6 +1162,10 @@ abstract class Erasing extends ScribbleState {
   /// Lines will be simplified when they are finished. A value of 0 (default)
   /// will mean no simplification.
   double get simplificationTolerance;
+  @override
+
+  /// The currently selected tool
+  Tool get selectedTool;
   @override
   @JsonKey(ignore: true)
   _$$ErasingImplCopyWith<_$ErasingImpl> get copyWith =>

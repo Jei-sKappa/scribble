@@ -70,6 +70,9 @@ sealed class ScribbleState with _$ScribbleState {
     /// will mean no simplification.
     /// {@endtemplate}
     @Default(0) double simplificationTolerance,
+
+    /// The currently selected tool
+    @Default(Tool.pen) Tool selectedTool,
   }) = Drawing;
 
   /// The state of the scribble widget when the user is currently erasing.
@@ -102,6 +105,9 @@ sealed class ScribbleState with _$ScribbleState {
     /// Lines will be simplified when they are finished. A value of 0 (default)
     /// will mean no simplification.
     @Default(0) double simplificationTolerance,
+
+    /// The currently selected tool
+    @Default(Tool.pen) Tool selectedTool,
   }) = Erasing;
 
   /// Constructs a [ScribbleState] from a JSON object.

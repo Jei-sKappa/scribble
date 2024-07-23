@@ -3,6 +3,7 @@ import 'package:scribble/src/domain/model/sketch_line/sketch_line.dart';
 
 export '../point/point.dart';
 export '../sketch_line/sketch_line.dart';
+export '../tool/tool.dart';
 
 part 'sketch.freezed.dart';
 part 'sketch.g.dart';

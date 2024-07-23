@@ -86,9 +86,11 @@ class ScribbleNotifier extends ScribbleNotifierBase
     /// starting point.
     Sketch? sketch,
 
+    // TODO: Create the option to assing a tool based on the pointer type
     /// Which pointers can be drawn with and are captured.
     ScribblePointerMode allowedPointersMode = ScribblePointerMode.all,
 
+    // TODO: Create the option to disable limit
     /// How many states you want stored in the undo history, 30 by default.
     int maxHistoryLength = 30,
     this.widths = const [5, 10, 15],
@@ -203,6 +205,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
       scaleFactor: value.scaleFactor,
       allowedPointersMode: value.allowedPointersMode,
       activePointerIds: value.activePointerIds,
+      selectedTool: value.selectedTool,
     );
   }
 
@@ -233,6 +236,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
         selectedColor: color.value,
         selectedWidth: s.selectedWidth,
         allowedPointersMode: s.allowedPointersMode,
+        selectedTool: s.selectedTool,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
@@ -241,6 +245,29 @@ class ScribbleNotifier extends ScribbleNotifierBase
         allowedPointersMode: s.allowedPointersMode,
         scaleFactor: value.scaleFactor,
         activePointerIds: value.activePointerIds,
+        selectedTool: s.selectedTool,
+      ),
+    );
+  }
+
+  /// Sets the tool to the given tool.
+  void setTool(Tool tool) {
+    temporaryValue = value.map(
+      drawing: (s) => ScribbleState.drawing(
+        sketch: s.sketch,
+        selectedColor: s.selectedColor,
+        selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
+        selectedTool: tool,
+      ),
+      erasing: (s) => ScribbleState.drawing(
+        sketch: s.sketch,
+        selectedColor: const Color(0xFF000000).value,
+        selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
+        scaleFactor: value.scaleFactor,
+        activePointerIds: value.activePointerIds,
+        selectedTool: tool,
       ),
     );
   }
@@ -314,6 +341,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
           points: [_getPointFromEvent(event)],
           color: (value as Drawing).selectedColor,
           width: value.selectedWidth / value.scaleFactor,
+          tool: (value as Drawing).selectedTool,
         ),
       );
     }

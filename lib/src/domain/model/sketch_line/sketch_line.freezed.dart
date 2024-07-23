@@ -29,6 +29,9 @@ mixin _$SketchLine {
   /// The width of the line
   double get width => throw _privateConstructorUsedError;
 
+  /// The tool used to draw the line
+  Tool get tool => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $SketchLineCopyWith<SketchLine> get copyWith =>
@@ -41,7 +44,7 @@ abstract class $SketchLineCopyWith<$Res> {
           SketchLine value, $Res Function(SketchLine) then) =
       _$SketchLineCopyWithImpl<$Res, SketchLine>;
   @useResult
-  $Res call({List<Point> points, int color, double width});
+  $Res call({List<Point> points, int color, double width, Tool tool});
 }
 
 /// @nodoc
@@ -60,6 +63,7 @@ class _$SketchLineCopyWithImpl<$Res, $Val extends SketchLine>
     Object? points = null,
     Object? color = null,
     Object? width = null,
+    Object? tool = null,
   }) {
     return _then(_value.copyWith(
       points: null == points
@@ -74,6 +78,10 @@ class _$SketchLineCopyWithImpl<$Res, $Val extends SketchLine>
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
               as double,
+      tool: null == tool
+          ? _value.tool
+          : tool // ignore: cast_nullable_to_non_nullable
+              as Tool,
     ) as $Val);
   }
 }
@@ -86,7 +94,7 @@ abstract class _$$SketchLineImplCopyWith<$Res>
       __$$SketchLineImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Point> points, int color, double width});
+  $Res call({List<Point> points, int color, double width, Tool tool});
 }
 
 /// @nodoc
@@ -103,6 +111,7 @@ class __$$SketchLineImplCopyWithImpl<$Res>
     Object? points = null,
     Object? color = null,
     Object? width = null,
+    Object? tool = null,
   }) {
     return _then(_$SketchLineImpl(
       points: null == points
@@ -117,6 +126,10 @@ class __$$SketchLineImplCopyWithImpl<$Res>
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
               as double,
+      tool: null == tool
+          ? _value.tool
+          : tool // ignore: cast_nullable_to_non_nullable
+              as Tool,
     ));
   }
 }
@@ -127,7 +140,8 @@ class _$SketchLineImpl implements _SketchLine {
   const _$SketchLineImpl(
       {required final List<Point> points,
       required this.color,
-      required this.width})
+      required this.width,
+      this.tool = Tool.pen})
       : _points = points;
 
   factory _$SketchLineImpl.fromJson(Map<String, dynamic> json) =>
@@ -152,9 +166,14 @@ class _$SketchLineImpl implements _SketchLine {
   @override
   final double width;
 
+  /// The tool used to draw the line
+  @override
+  @JsonKey()
+  final Tool tool;
+
   @override
   String toString() {
-    return 'SketchLine(points: $points, color: $color, width: $width)';
+    return 'SketchLine(points: $points, color: $color, width: $width, tool: $tool)';
   }
 
   @override
@@ -164,13 +183,14 @@ class _$SketchLineImpl implements _SketchLine {
             other is _$SketchLineImpl &&
             const DeepCollectionEquality().equals(other._points, _points) &&
             (identical(other.color, color) || other.color == color) &&
-            (identical(other.width, width) || other.width == width));
+            (identical(other.width, width) || other.width == width) &&
+            (identical(other.tool, tool) || other.tool == tool));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_points), color, width);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_points), color, width, tool);
 
   @JsonKey(ignore: true)
   @override
@@ -190,7 +210,8 @@ abstract class _SketchLine implements SketchLine {
   const factory _SketchLine(
       {required final List<Point> points,
       required final int color,
-      required final double width}) = _$SketchLineImpl;
+      required final double width,
+      final Tool tool}) = _$SketchLineImpl;
 
   factory _SketchLine.fromJson(Map<String, dynamic> json) =
       _$SketchLineImpl.fromJson;
@@ -207,6 +228,10 @@ abstract class _SketchLine implements SketchLine {
 
   /// The width of the line
   double get width;
+  @override
+
+  /// The tool used to draw the line
+  Tool get tool;
   @override
   @JsonKey(ignore: true)
   _$$SketchLineImplCopyWith<_$SketchLineImpl> get copyWith =>

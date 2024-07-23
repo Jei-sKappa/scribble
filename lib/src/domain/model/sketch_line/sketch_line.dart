@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scribble/src/domain/model/point/point.dart';
+import 'package:scribble/src/domain/model/tool/tool.dart';
 
 part 'sketch_line.freezed.dart';
 part 'sketch_line.g.dart';
@@ -19,6 +20,9 @@ class SketchLine with _$SketchLine {
 
     /// The width of the line
     required double width,
+
+    /// The tool used to draw the line
+    @Default(Tool.pen) Tool tool,
   }) = _SketchLine;
 
   /// Constructs a sketch line from a JSON object.
