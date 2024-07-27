@@ -2,6 +2,9 @@ import 'dart:ui';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scribble/src/domain/model/sketch/sketch.dart';
+import 'package:scribble/src/view/state/draw_mode.dart';
+
+export 'draw_mode.dart';
 
 part 'scribble.state.freezed.dart';
 
@@ -35,8 +38,11 @@ sealed class ScribbleState with _$ScribbleState {
     /// The current state of the sketch
     required Sketch sketch,
 
-    /// The line that is currently being drawn
-    SketchLine? activeLine,
+    /// The draw mode that is currently active
+    @Default(DrawMode.free) DrawMode drawMode,
+
+    /// The drawing that is currently being drawn
+    SketchDrawing? activeDrawing,
 
     /// Which pointers are allowed for drawing and will be captured by the
     /// scribble widget.
@@ -73,12 +79,19 @@ sealed class ScribbleState with _$ScribbleState {
 
     /// The currently selected tool
     @Default(Tool.pen) Tool selectedTool,
+
+    /// The currently selected shape
+    ShapeTemplate? selectedShape,
   }) = Drawing;
 
+  // TODO: Erasing state should not have drawing properties to save them for later but insted the drawing properties should be saved in the notifier when changing from drawing to erasing.
   /// The state of the scribble widget when the user is currently erasing.
   const factory ScribbleState.erasing({
     /// The current state of the sketch
     required Sketch sketch,
+
+    /// The draw mode that is currently active
+    @Default(DrawMode.free) DrawMode drawMode,
 
     /// Which pointers are allowed for drawing and will be captured by the
     /// scribble widget.
@@ -108,6 +121,9 @@ sealed class ScribbleState with _$ScribbleState {
 
     /// The currently selected tool
     @Default(Tool.pen) Tool selectedTool,
+
+    /// The currently selected shape
+    ShapeTemplate? selectedShape,
   }) = Erasing;
 
   /// Constructs a [ScribbleState] from a JSON object.
@@ -121,11 +137,11 @@ sealed class ScribbleState with _$ScribbleState {
 
   /// Returns the list of lines that should be drawn on the canvas by
   /// combining the sketches lines with the current active line if it exists.
-  List<SketchLine> get lines => map(
-        drawing: (d) => d.activeLine == null
-            ? sketch.lines
-            : [...sketch.lines, d.activeLine!],
-        erasing: (d) => d.sketch.lines,
+  List<SketchDrawing> get drawings => map(
+        drawing: (d) => d.activeDrawing == null
+            ? sketch.drawings
+            : [...sketch.drawings, d.activeDrawing!],
+        erasing: (d) => d.sketch.drawings,
       );
 
   /// Returns a set of [PointerDeviceKind] that represents the currently

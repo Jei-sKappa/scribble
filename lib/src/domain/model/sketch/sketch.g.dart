@@ -7,12 +7,12 @@ part of 'sketch.dart';
 // **************************************************************************
 
 _$SketchImpl _$$SketchImplFromJson(Map<String, dynamic> json) => _$SketchImpl(
-      lines: (json['lines'] as List<dynamic>)
-          .map((e) => SketchLine.fromJson(e as Map<String, dynamic>))
+      drawings: (json['drawings'] as List<dynamic>)
+          .map((e) => SketchDrawing.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$$SketchImplToJson(_$SketchImpl instance) =>
     <String, dynamic>{
-      'lines': instance.lines.map((e) => e.toJson()).toList(),
+      'drawings': instance.drawings.map((e) => e.toJson()).toList(),
     };

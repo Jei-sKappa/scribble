@@ -7,7 +7,7 @@ Paint get _defaultPaint => Paint()..style = PaintingStyle.fill;
 Paint get _penPaint => _defaultPaint;
 
 Paint get _highlighterPaint => Paint()..style = PaintingStyle.fill
-    // TODO: Blend mode do not work as expected: flutter seems to
+    // TODO(Jei-sKappa): Blend mode do not work as expected: flutter seems to
     // have trouble with the blend mode after repaints
     // ..blendMode = BlendMode.darken
     // ..blendMode = BlendMode.multiply

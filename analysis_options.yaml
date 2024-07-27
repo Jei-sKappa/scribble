@@ -1,1 +1,4 @@
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
 include: package:lintervention/analysis_options.yaml

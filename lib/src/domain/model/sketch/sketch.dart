@@ -1,19 +1,20 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:scribble/src/domain/model/sketch_line/sketch_line.dart';
+import 'package:scribble/src/domain/model/sketch_drawing/sketch_drawing.dart';
 
 export '../point/point.dart';
-export '../sketch_line/sketch_line.dart';
+export '../shape_template/shape_template.dart';
+export '../sketch_drawing/sketch_drawing.dart';
 export '../tool/tool.dart';
 
 part 'sketch.freezed.dart';
 part 'sketch.g.dart';
 
-/// Represents a sketch with a list of [SketchLine]s.
+/// Represents a sketch with a list of [SketchDrawing]s.
 @freezed
 class Sketch with _$Sketch {
-  /// Represents a sketch with a list of [SketchLine]s.
+  /// Represents a sketch with a list of [SketchDrawing]s.
   const factory Sketch({
-    required List<SketchLine> lines,
+    required List<SketchDrawing> drawings,
   }) = _Sketch;
 
   /// Constructs a sketch from a JSON object.

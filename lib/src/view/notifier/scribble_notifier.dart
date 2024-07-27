@@ -5,7 +5,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scribble/scribble.dart';
+import 'package:scribble/src/view/painting/line_sketch_draw_polygon_extension.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
+import 'package:scribble/src/view/painting/shape_sketch_draw_polygon_extension.dart';
 import 'package:scribble/src/view/simplification/sketch_simplifier.dart';
 import 'package:value_notifier_tools/value_notifier_tools.dart';
 
@@ -86,11 +88,11 @@ class ScribbleNotifier extends ScribbleNotifierBase
     /// starting point.
     Sketch? sketch,
 
-    // TODO: Create the option to assing a tool based on the pointer type
+    // TODO(Jei-sKappa): Create the option to assing a tool based on the pointer type
     /// Which pointers can be drawn with and are captured.
     ScribblePointerMode allowedPointersMode = ScribblePointerMode.all,
 
-    // TODO: Create the option to disable limit
+    // TODO(Jei-sKappa): Create the option to disable limit
     /// How many states you want stored in the undo history, 30 by default.
     int maxHistoryLength = 30,
     this.widths = const [5, 10, 15],
@@ -106,7 +108,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
                   sketch,
                   pixelTolerance: simplificationTolerance,
                 ),
-              null => const Sketch(lines: []),
+              null => const Sketch(drawings: []),
             },
             selectedWidth: widths[0],
             allowedPointersMode: allowedPointersMode,
@@ -181,11 +183,11 @@ class ScribbleNotifier extends ScribbleNotifierBase
   void clear() {
     value = switch (value) {
       final Drawing d => d.copyWith(
-          sketch: const Sketch(lines: []),
-          activeLine: null,
+          sketch: const Sketch(drawings: []),
+          activeDrawing: null,
         ),
       final Erasing e => e.copyWith(
-          sketch: const Sketch(lines: []),
+          sketch: const Sketch(drawings: []),
         ),
     };
   }
@@ -206,6 +208,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
       allowedPointersMode: value.allowedPointersMode,
       activePointerIds: value.activePointerIds,
       selectedTool: value.selectedTool,
+      drawMode: value.drawMode,
+      selectedShape: value.selectedShape,
     );
   }
 
@@ -237,6 +241,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
         selectedWidth: s.selectedWidth,
         allowedPointersMode: s.allowedPointersMode,
         selectedTool: s.selectedTool,
+        drawMode: value.drawMode,
+        selectedShape: value.selectedShape,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
@@ -246,6 +252,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
         scaleFactor: value.scaleFactor,
         activePointerIds: value.activePointerIds,
         selectedTool: s.selectedTool,
+        drawMode: value.drawMode,
+        selectedShape: value.selectedShape,
       ),
     );
   }
@@ -259,6 +267,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
         selectedWidth: s.selectedWidth,
         allowedPointersMode: s.allowedPointersMode,
         selectedTool: tool,
+        drawMode: value.drawMode,
+        selectedShape: value.selectedShape,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
@@ -268,6 +278,60 @@ class ScribbleNotifier extends ScribbleNotifierBase
         scaleFactor: value.scaleFactor,
         activePointerIds: value.activePointerIds,
         selectedTool: tool,
+        drawMode: value.drawMode,
+        selectedShape: value.selectedShape,
+      ),
+    );
+  }
+
+  /// Sets the shape to the given shape.
+  void setShape(ShapeTemplate shape) {
+    temporaryValue = value.map(
+      drawing: (s) => ScribbleState.drawing(
+        sketch: s.sketch,
+        selectedColor: s.selectedColor,
+        selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
+        selectedTool: value.selectedTool,
+        drawMode: DrawMode.shape,
+        selectedShape: shape,
+      ),
+      erasing: (s) => ScribbleState.drawing(
+        sketch: s.sketch,
+        selectedColor: const Color(0xFF000000).value,
+        selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
+        scaleFactor: value.scaleFactor,
+        activePointerIds: value.activePointerIds,
+        selectedTool: value.selectedTool,
+        drawMode: DrawMode.shape,
+        selectedShape: shape,
+      ),
+    );
+  }
+
+  /// Sets the draw mode to the given mode.
+  void setDrawMode(DrawMode mode) {
+    temporaryValue = value.map(
+      drawing: (s) => ScribbleState.drawing(
+        sketch: s.sketch,
+        selectedColor: s.selectedColor,
+        selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
+        selectedTool: value.selectedTool,
+        drawMode: mode,
+        selectedShape: value.selectedShape,
+      ),
+      erasing: (s) => ScribbleState.drawing(
+        sketch: s.sketch,
+        selectedColor: const Color(0xFF000000).value,
+        selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
+        scaleFactor: value.scaleFactor,
+        activePointerIds: value.activePointerIds,
+        selectedTool: value.selectedTool,
+        drawMode: mode,
+        selectedShape: value.selectedShape,
       ),
     );
   }
@@ -322,29 +386,64 @@ class ScribbleNotifier extends ScribbleNotifierBase
     if (!value.supportedPointerKinds.contains(event.kind)) return;
     var s = value;
 
-    // Are there already pointers on the screen?
-    if (value.activePointerIds.isNotEmpty) {
-      s = value.map(
-        drawing: (s) =>
-            // If the current line already contains something
-            (s.activeLine != null && s.activeLine!.points.length > 2)
-                ? _finishLineForState(s)
-                : s.copyWith(
-                    activeLine: null,
-                  ),
-        erasing: (s) => s,
-      );
-    } else if (value is Drawing) {
-      s = (value as Drawing).copyWith(
-        pointerPosition: _getPointFromEvent(event),
-        activeLine: SketchLine(
-          points: [_getPointFromEvent(event)],
-          color: (value as Drawing).selectedColor,
-          width: value.selectedWidth / value.scaleFactor,
-          tool: (value as Drawing).selectedTool,
-        ),
-      );
+    if (s is Drawing) {
+      // Are there already pointers on the screen?
+      if (s.activePointerIds.isNotEmpty && s.activeDrawing != null) {
+        // Handle multitap
+        switch (s.activeDrawing!) {
+          case final FreeSketchDrawing freeSketchDrawing:
+            if (freeSketchDrawing.points.length > 2) {
+              // Finish the line
+              temporaryValue = _finishLineForState(s);
+            } else {
+              // The line is too short, we can probably ignore it
+              temporaryValue = s.copyWith(
+                activeDrawing: null,
+              );
+            }
+          case final LineSketchDrawing _:
+            temporaryValue = _finishLineForState(s);
+          case final ShapeSketchDrawing _:
+            temporaryValue = _finishLineForState(s);
+        }
+      }
+
+      // Handle actual tap
+      switch (s.drawMode) {
+        case DrawMode.free:
+          s = s.copyWith(
+            activeDrawing: FreeSketchDrawing(
+              points: [_getPointFromEvent(event)],
+              color: s.selectedColor,
+              width: s.selectedWidth / s.scaleFactor,
+              tool: s.selectedTool,
+            ),
+          );
+        case DrawMode.line:
+          s = s.copyWith(
+            activeDrawing: LineSketchDrawing(
+              anchorPoint: _getPointFromEvent(event),
+              endPoint: _getPointFromEvent(event),
+              color: s.selectedColor,
+              width: s.selectedWidth / s.scaleFactor,
+              tool: s.selectedTool,
+            ),
+          );
+        case DrawMode.shape:
+          s = s.copyWith(
+            activeDrawing: ShapeSketchDrawing(
+              anchorPoint: _getPointFromEvent(event),
+              endPoint: _getPointFromEvent(event),
+              shapeTemplate: s.selectedShape ?? squareShape,
+              isFilled: false,
+              color: s.selectedColor,
+              width: s.selectedWidth / s.scaleFactor,
+              tool: s.selectedTool,
+            ),
+          );
+      }
     }
+
     temporaryValue = s.copyWith(
       activePointerIds: [...value.activePointerIds, event.pointer],
     );
@@ -421,35 +520,100 @@ class ScribbleNotifier extends ScribbleNotifierBase
     );
   }
 
+  bool _isDistanceEnough(Offset a, Offset b) =>
+      (a - b).distance > (kPrecisePointerPanSlop / value.scaleFactor);
+
   ScribbleState _addPoint(PointerEvent event, ScribbleState s) {
     if (s is Erasing || !s.active) return s;
-    if (s is Drawing && s.activeLine == null) return s;
-    final currentLine = (s as Drawing).activeLine!;
-    final distanceToLast = currentLine.points.isEmpty
-        ? double.infinity
-        : (currentLine.points.last.asOffset - event.localPosition).distance;
-    if (distanceToLast <= kPrecisePointerPanSlop / s.scaleFactor) return s;
-    return s.copyWith(
-      activeLine: currentLine.copyWith(
-        points: [
-          ...currentLine.points,
-          _getPointFromEvent(event),
-        ],
-      ),
-    );
+
+    if (s is Drawing && s.activeDrawing == null) return s;
+
+    final currentDrawing = (s as Drawing).activeDrawing!;
+
+    switch (currentDrawing) {
+      case final FreeSketchDrawing freeSketchDrawing:
+        if (freeSketchDrawing.points.isNotEmpty &&
+            !_isDistanceEnough(
+              freeSketchDrawing.points.last.asOffset,
+              event.localPosition,
+            )) {
+          return s;
+        }
+
+        return s.copyWith(
+          activeDrawing: freeSketchDrawing.copyWith(
+            points: [
+              ...freeSketchDrawing.points,
+              _getPointFromEvent(event),
+            ],
+          ),
+        );
+      case final LineSketchDrawing lineSketchDrawing:
+        if (!_isDistanceEnough(
+          lineSketchDrawing.anchorPoint.asOffset,
+          event.localPosition,
+        )) {
+          return s;
+        }
+
+        return s.copyWith(
+          activeDrawing: lineSketchDrawing.copyWith(
+            endPoint: _getPointFromEvent(event),
+          ),
+        );
+      case final ShapeSketchDrawing shapeSketchDrawing:
+        if (!_isDistanceEnough(
+          shapeSketchDrawing.anchorPoint.asOffset,
+          event.localPosition,
+        )) {
+          return s;
+        }
+
+        return s.copyWith(
+          activeDrawing: shapeSketchDrawing.copyWith(
+            endPoint: _getPointFromEvent(event),
+          ),
+        );
+    }
   }
 
   ScribbleState _erasePoint(PointerEvent event) {
     return value.copyWith.sketch(
-      lines: value.sketch.lines
-          .where(
-            (l) => l.points.every(
+      drawings: value.sketch.drawings.where((drawing) {
+        switch (drawing) {
+          case final FreeSketchDrawing freeSketchDrawing:
+            // Return true if all points are far enough away from the eraser
+            return freeSketchDrawing.points.every(
               (p) =>
                   (event.localPosition - p.asOffset).distance >
-                  l.width + value.selectedWidth,
-            ),
-          )
-          .toList(),
+                  drawing.width + value.selectedWidth,
+            );
+          case final LineSketchDrawing lineSketchDrawing:
+            final rectangleCoords = lineSketchDrawing.getRectangle(
+              scaleFactor: value.scaleFactor,
+            );
+
+            final verticesCoords = [
+              rectangleCoords.$1,
+              rectangleCoords.$2,
+              rectangleCoords.$3,
+              rectangleCoords.$4,
+            ];
+
+            final verticelPoints =
+                verticesCoords.map((p) => Point(p.dx, p.dy)).toList();
+
+            return !Poly.isPointInPolygon(
+              _getPointFromEvent(event),
+              verticelPoints,
+            );
+          case final ShapeSketchDrawing shapeSketchDrawing:
+            return !Poly.isPointInPolygon(
+              _getPointFromEvent(event),
+              shapeSketchDrawing.calculateScaledVertices(),
+            );
+        }
+      }).toList(),
     );
   }
 
@@ -467,14 +631,14 @@ class ScribbleNotifier extends ScribbleNotifierBase
   }
 
   ScribbleState _finishLineForState(ScribbleState s) {
-    if (s case Drawing(activeLine: final activeLine?)) {
+    if (s case Drawing(activeDrawing: final activeDrawing?)) {
       return s.copyWith(
-        activeLine: null,
+        activeDrawing: null,
         sketch: s.sketch.copyWith(
-          lines: [
-            ...s.sketch.lines,
-            simplifier.simplify(
-              activeLine,
+          drawings: [
+            ...s.sketch.drawings,
+            simplifier.simplifyDrawing(
+              activeDrawing,
               pixelTolerance: s.simplificationTolerance,
             ),
           ],
@@ -484,3 +648,175 @@ class ScribbleNotifier extends ScribbleNotifierBase
     return s;
   }
 }
+
+//!
+//!
+//!
+
+// bool _isPointOnSegment(Point p, Point s1, Point s2) {
+//   // Collinearity check
+//   final collinear =
+//       (p.x - s1.x) * (s2.y - s1.y) == (p.y - s1.y) * (s2.x - s1.x);
+//   if (!collinear) return false;
+
+//   // Segment bounding check
+//   final withinBounds =
+//       (p.x >= s1.x && p.x <= s2.x || p.x >= s2.x && p.x <= s1.x) &&
+//           (p.y >= s1.y && p.y <= s2.y || p.y >= s2.y && p.y <= s1.y);
+
+//   return withinBounds;
+// }
+
+//!
+//!
+//!
+
+class Poly {
+  /// Check if a Point [point] is inside a polygon representing by a List of Point [vertices]
+  /// by using a Ray-Casting algorithm
+  static bool isPointInPolygon(Point point, List<Point> vertices) {
+    var intersectCount = 0;
+    for (var i = 0; i < vertices.length; i += 1) {
+      final vertB = i == vertices.length - 1 ? vertices[0] : vertices[i + 1];
+      if (Poly.rayCastIntersect(point, vertices[i], vertB)) {
+        intersectCount += 1;
+      }
+    }
+    return (intersectCount % 2) == 1;
+  }
+
+  /// Ray-Casting algorithm implementation
+  /// Calculate whether a horizontal ray cast eastward from [point]
+  /// will intersect with the line between [vertA] and [vertB]
+  /// Refer to `https://en.wikipedia.org/wiki/Point_in_polygon` for more explanation
+  /// or the example comment bloc at the end of this file
+  static bool rayCastIntersect(Point point, Point vertA, Point vertB) {
+    final aY = vertA.y;
+    final bY = vertB.y;
+    final aX = vertA.x;
+    final bX = vertB.x;
+    final pY = point.y;
+    final pX = point.x;
+
+    if ((aY > pY && bY > pY) || (aY < pY && bY < pY) || (aX < pX && bX < pX)) {
+      // The case where the ray does not possibly pass through the polygon edge,
+      // because both points A and B are above/below the line,
+      // or both are to the left/west of the starting point
+      // (as the line travels eastward into the polygon).
+      // Therefore we should not perform the check and simply return false.
+      // If we did not have this check we would get false positives.
+      return false;
+    }
+
+    // y = mx + b : Standard linear equation
+    // (y-b)/m = x : Formula to solve for x
+
+    // M is rise over run -> the slope or angle between vertices A and B.
+    final m = (aY - bY) / (aX - bX);
+    // B is the Y-intercept of the line between vertices A and B
+    final b = ((aX * -1) * m) + aY;
+    // We want to find the X location at which a flat horizontal ray at Y height
+    // of pY would intersect with the line between A and B.
+    // So we use our rearranged Y = MX+B, but we use pY as our Y value
+    final x = (pY - b) / m;
+
+    // If the value of X
+    // (the x point at which the ray intersects the line created by points A and B)
+    // is "ahead" of the point's X value, then the ray can be said to intersect with the polygon.
+    return x > pX;
+  }
+}
+//!
+//!
+//!
+
+// enum PointInPolygonResult {
+//   isInside,
+//   isOnEdge,
+//   isOutside,
+// }
+
+// PointInPolygonResult pointInPolygon(Point p, ShapeTemplate shape) {
+//   var i = 0;
+//   var ii = 0;
+//   var k = 0;
+//   num f = 0;
+//   num u1 = 0;
+//   num v1 = 0;
+//   num u2 = 0;
+//   num v2 = 0;
+//   Position currentP;
+//   Position nextP;
+
+//   final num x = p.coordinates.lng;
+//   final num y = p.coordinates.lat;
+
+//   final int numContours = polygon.coordinates.length;
+//   for (i; i < numContours; i++) {
+//     ii = 0;
+//     final contourLen = polygon.coordinates[i].length - 1;
+//     final contour = polygon.coordinates[i];
+
+//     currentP = contour[0];
+//     if (currentP[0] != contour[contourLen][0] &&
+//         currentP[1] != contour[contourLen][1]) {
+//       throw Exception('First and last coordinates in a ring must be the same');
+//     }
+
+//     u1 = currentP.lng - x;
+//     v1 = currentP.lat - y;
+
+//     for (ii; ii < contourLen; ii++) {
+//       nextP = contour[ii + 1];
+
+//       v2 = nextP.lat - y;
+
+//       if ((v1 < 0 && v2 < 0) || (v1 > 0 && v2 > 0)) {
+//         currentP = nextP;
+//         v1 = v2;
+//         u1 = currentP.lng - x;
+//         continue;
+//       }
+
+//       u2 = nextP.lng - p.coordinates.lng;
+
+//       if (v2 > 0 && v1 <= 0) {
+//         f = (u1 * v2) - (u2 * v1);
+//         if (f > 0) {
+//           k = k + 1;
+//         } else if (f == 0) {
+//           return PointInPolygonResult.isOnEdge;
+//         }
+//       } else if (v1 > 0 && v2 <= 0) {
+//         f = (u1 * v2) - (u2 * v1);
+//         if (f < 0) {
+//           k = k + 1;
+//         } else if (f == 0) {
+//           return PointInPolygonResult.isOnEdge;
+//         }
+//       } else if (v2 == 0 && v1 < 0) {
+//         f = (u1 * v2) - (u2 * v1);
+//         if (f == 0) {
+//           return PointInPolygonResult.isOnEdge;
+//         }
+//       } else if (v1 == 0 && v2 < 0) {
+//         f = u1 * v2 - u2 * v1;
+//         if (f == 0) return PointInPolygonResult.isOnEdge;
+//       } else if (v1 == 0 && v2 == 0) {
+//         if (u2 <= 0 && u1 >= 0) {
+//           return PointInPolygonResult.isOnEdge;
+//         } else if (u1 <= 0 && u2 >= 0) {
+//           return PointInPolygonResult.isOnEdge;
+//         }
+//       }
+//       currentP = nextP;
+//       v1 = v2;
+//       u1 = u2;
+//     }
+//   }
+
+//   if (k % 2 == 0) {
+//     return PointInPolygonResult.isOutside;
+//   }
+//   return PointInPolygonResult.isInside;
+// }

@@ -9,9 +9,12 @@ part of 'scribble.state.dart';
 _$DrawingImpl _$$DrawingImplFromJson(Map<String, dynamic> json) =>
     _$DrawingImpl(
       sketch: Sketch.fromJson(json['sketch'] as Map<String, dynamic>),
-      activeLine: json['activeLine'] == null
+      drawMode: $enumDecodeNullable(_$DrawModeEnumMap, json['drawMode']) ??
+          DrawMode.free,
+      activeDrawing: json['activeDrawing'] == null
           ? null
-          : SketchLine.fromJson(json['activeLine'] as Map<String, dynamic>),
+          : SketchDrawing.fromJson(
+              json['activeDrawing'] as Map<String, dynamic>),
       allowedPointersMode: $enumDecodeNullable(
               _$ScribblePointerModeEnumMap, json['allowedPointersMode']) ??
           ScribblePointerMode.all,
@@ -29,13 +32,18 @@ _$DrawingImpl _$$DrawingImplFromJson(Map<String, dynamic> json) =>
           (json['simplificationTolerance'] as num?)?.toDouble() ?? 0,
       selectedTool:
           $enumDecodeNullable(_$ToolEnumMap, json['selectedTool']) ?? Tool.pen,
+      selectedShape: json['selectedShape'] == null
+          ? null
+          : ShapeTemplate.fromJson(
+              json['selectedShape'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$DrawingImplToJson(_$DrawingImpl instance) =>
     <String, dynamic>{
       'sketch': instance.sketch.toJson(),
-      'activeLine': instance.activeLine?.toJson(),
+      'drawMode': _$DrawModeEnumMap[instance.drawMode]!,
+      'activeDrawing': instance.activeDrawing?.toJson(),
       'allowedPointersMode':
           _$ScribblePointerModeEnumMap[instance.allowedPointersMode]!,
       'activePointerIds': instance.activePointerIds,
@@ -45,8 +53,15 @@ Map<String, dynamic> _$$DrawingImplToJson(_$DrawingImpl instance) =>
       'scaleFactor': instance.scaleFactor,
       'simplificationTolerance': instance.simplificationTolerance,
       'selectedTool': _$ToolEnumMap[instance.selectedTool]!,
+      'selectedShape': instance.selectedShape?.toJson(),
       'runtimeType': instance.$type,
     };
+
+const _$DrawModeEnumMap = {
+  DrawMode.free: 'free',
+  DrawMode.line: 'line',
+  DrawMode.shape: 'shape',
+};
 
 const _$ScribblePointerModeEnumMap = {
   ScribblePointerMode.all: 'all',
@@ -64,6 +79,8 @@ const _$ToolEnumMap = {
 _$ErasingImpl _$$ErasingImplFromJson(Map<String, dynamic> json) =>
     _$ErasingImpl(
       sketch: Sketch.fromJson(json['sketch'] as Map<String, dynamic>),
+      drawMode: $enumDecodeNullable(_$DrawModeEnumMap, json['drawMode']) ??
+          DrawMode.free,
       allowedPointersMode: $enumDecodeNullable(
               _$ScribblePointerModeEnumMap, json['allowedPointersMode']) ??
           ScribblePointerMode.all,
@@ -80,12 +97,17 @@ _$ErasingImpl _$$ErasingImplFromJson(Map<String, dynamic> json) =>
           (json['simplificationTolerance'] as num?)?.toDouble() ?? 0,
       selectedTool:
           $enumDecodeNullable(_$ToolEnumMap, json['selectedTool']) ?? Tool.pen,
+      selectedShape: json['selectedShape'] == null
+          ? null
+          : ShapeTemplate.fromJson(
+              json['selectedShape'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$ErasingImplToJson(_$ErasingImpl instance) =>
     <String, dynamic>{
       'sketch': instance.sketch.toJson(),
+      'drawMode': _$DrawModeEnumMap[instance.drawMode]!,
       'allowedPointersMode':
           _$ScribblePointerModeEnumMap[instance.allowedPointersMode]!,
       'activePointerIds': instance.activePointerIds,
@@ -94,5 +116,6 @@ Map<String, dynamic> _$$ErasingImplToJson(_$ErasingImpl instance) =>
       'scaleFactor': instance.scaleFactor,
       'simplificationTolerance': instance.simplificationTolerance,
       'selectedTool': _$ToolEnumMap[instance.selectedTool]!,
+      'selectedShape': instance.selectedShape?.toJson(),
       'runtimeType': instance.$type,
     };

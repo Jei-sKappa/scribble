@@ -11,15 +11,30 @@ abstract class SketchSimplifier {
   const SketchSimplifier();
 
   /// Simplifies the given list of points.
-  SketchLine simplify(SketchLine line, {required double pixelTolerance});
+  List<Point> simplify(List<Point> points, {required double pixelTolerance});
+
+  /// Simplifies a single drawing.
+  SketchDrawing simplifyDrawing(
+    SketchDrawing drawing, {
+    required double pixelTolerance,
+  }) {
+    if (pixelTolerance == 0) return drawing;
+
+    if (drawing is FreeSketchDrawing) {
+      return drawing.copyWith(
+        points: simplify(drawing.points, pixelTolerance: pixelTolerance),
+      );
+    }
+    return drawing;
+  }
 
   /// Simplifies an entire sketch by simplifying each line in the sketch.
   Sketch simplifySketch(Sketch sketch, {required double pixelTolerance}) {
     if (pixelTolerance == 0) return sketch;
     return sketch.copyWith(
-      lines: [
-        for (final l in sketch.lines)
-          simplify(l, pixelTolerance: pixelTolerance),
+      drawings: [
+        for (final drawing in sketch.drawings)
+          simplifyDrawing(drawing, pixelTolerance: pixelTolerance),
       ],
     );
   }
@@ -34,18 +49,18 @@ class VisvalingamSimplifier extends SketchSimplifier {
   const VisvalingamSimplifier();
 
   @override
-  SketchLine simplify(SketchLine line, {required double pixelTolerance}) {
-    if (pixelTolerance == 0) return line;
+  List<Point> simplify(List<Point> points, {required double pixelTolerance}) {
+    if (pixelTolerance == 0) return points;
 
-    final mathPoints = line.points.map((e) => math.Point(e.x, e.y)).toList();
+    final mathPoints = points.map((e) => math.Point(e.x, e.y)).toList();
 
     final simplified = Simpli.visvalingam(
       mathPoints,
       pixelTolerance: pixelTolerance,
     );
+
     final removedIndices = mathPoints.removedIndices(simplified.cast());
-    return line.copyWith(
-      points: line.points.withRemovedIndices(removedIndices.toSet()).toList(),
-    );
+
+    return points.withRemovedIndices(removedIndices.toSet()).toList();
   }
 }

@@ -34,14 +34,14 @@ class ScribbleEditingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final activeLine = state.map(
-      drawing: (s) => s.activeLine,
+    final activeDrawing = state.map(
+      drawing: (s) => s.activeDrawing,
       erasing: (_) => null,
     );
 
-    if (activeLine != null) {
-      canvas.drawSketchLine(
-        activeLine,
+    if (activeDrawing != null) {
+      canvas.drawSketchDrawing(
+        activeDrawing,
         scaleFactor: state.scaleFactor,
         simulatePressure: simulatePressure,
       );
@@ -52,9 +52,16 @@ class ScribbleEditingPainter extends CustomPainter {
     if (state.pointerPosition != null &&
         ((state is Drawing &&
                 drawPointer &&
-                (state as Drawing).activeLine == null) ||
+                (state as Drawing).activeDrawing == null) ||
             state is Erasing && drawEraser)) {
-      canvas.drawPointerPreview(state);
+      canvas.drawPoint(
+        width: state.selectedWidth,
+        scaleFactor: state.scaleFactor,
+        color: state is Drawing ? (state as Drawing).selectedColor : 0xFF000000,
+        pointerPosition: state.pointerPosition!,
+        tool: state is Drawing ? (state as Drawing).selectedTool : null,
+      
+      );
     }
   }
 

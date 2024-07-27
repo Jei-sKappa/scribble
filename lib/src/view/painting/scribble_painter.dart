@@ -22,11 +22,11 @@ class ScribblePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (var i = 0; i < sketch.lines.length; ++i) {
-      // TODO: Currently at every paint call, ALL the paths are redrawn.
+    for (var i = 0; i < sketch.drawings.length; ++i) {
+      // TODO(Jei-sKappa): Currently at every paint call, ALL the paths are redrawn.
       // Look at canvas.saveLayer/.save/.restore to optimize this.
-      canvas.drawSketchLine(
-        sketch.lines[i],
+      canvas.drawSketchDrawing(
+        sketch.drawings[i],
         scaleFactor: scaleFactor,
         simulatePressure: simulatePressure,
       );

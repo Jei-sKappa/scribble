@@ -20,7 +20,7 @@ Sketch _$SketchFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Sketch {
-  List<SketchLine> get lines => throw _privateConstructorUsedError;
+  List<SketchDrawing> get drawings => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -32,7 +32,7 @@ abstract class $SketchCopyWith<$Res> {
   factory $SketchCopyWith(Sketch value, $Res Function(Sketch) then) =
       _$SketchCopyWithImpl<$Res, Sketch>;
   @useResult
-  $Res call({List<SketchLine> lines});
+  $Res call({List<SketchDrawing> drawings});
 }
 
 /// @nodoc
@@ -48,13 +48,13 @@ class _$SketchCopyWithImpl<$Res, $Val extends Sketch>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? lines = null,
+    Object? drawings = null,
   }) {
     return _then(_value.copyWith(
-      lines: null == lines
-          ? _value.lines
-          : lines // ignore: cast_nullable_to_non_nullable
-              as List<SketchLine>,
+      drawings: null == drawings
+          ? _value.drawings
+          : drawings // ignore: cast_nullable_to_non_nullable
+              as List<SketchDrawing>,
     ) as $Val);
   }
 }
@@ -66,7 +66,7 @@ abstract class _$$SketchImplCopyWith<$Res> implements $SketchCopyWith<$Res> {
       __$$SketchImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<SketchLine> lines});
+  $Res call({List<SketchDrawing> drawings});
 }
 
 /// @nodoc
@@ -80,13 +80,13 @@ class __$$SketchImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? lines = null,
+    Object? drawings = null,
   }) {
     return _then(_$SketchImpl(
-      lines: null == lines
-          ? _value._lines
-          : lines // ignore: cast_nullable_to_non_nullable
-              as List<SketchLine>,
+      drawings: null == drawings
+          ? _value._drawings
+          : drawings // ignore: cast_nullable_to_non_nullable
+              as List<SketchDrawing>,
     ));
   }
 }
@@ -94,22 +94,23 @@ class __$$SketchImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$SketchImpl implements _Sketch {
-  const _$SketchImpl({required final List<SketchLine> lines}) : _lines = lines;
+  const _$SketchImpl({required final List<SketchDrawing> drawings})
+      : _drawings = drawings;
 
   factory _$SketchImpl.fromJson(Map<String, dynamic> json) =>
       _$$SketchImplFromJson(json);
 
-  final List<SketchLine> _lines;
+  final List<SketchDrawing> _drawings;
   @override
-  List<SketchLine> get lines {
-    if (_lines is EqualUnmodifiableListView) return _lines;
+  List<SketchDrawing> get drawings {
+    if (_drawings is EqualUnmodifiableListView) return _drawings;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_lines);
+    return EqualUnmodifiableListView(_drawings);
   }
 
   @override
   String toString() {
-    return 'Sketch(lines: $lines)';
+    return 'Sketch(drawings: $drawings)';
   }
 
   @override
@@ -117,13 +118,13 @@ class _$SketchImpl implements _Sketch {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SketchImpl &&
-            const DeepCollectionEquality().equals(other._lines, _lines));
+            const DeepCollectionEquality().equals(other._drawings, _drawings));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_lines));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_drawings));
 
   @JsonKey(ignore: true)
   @override
@@ -140,12 +141,13 @@ class _$SketchImpl implements _Sketch {
 }
 
 abstract class _Sketch implements Sketch {
-  const factory _Sketch({required final List<SketchLine> lines}) = _$SketchImpl;
+  const factory _Sketch({required final List<SketchDrawing> drawings}) =
+      _$SketchImpl;
 
   factory _Sketch.fromJson(Map<String, dynamic> json) = _$SketchImpl.fromJson;
 
   @override
-  List<SketchLine> get lines;
+  List<SketchDrawing> get drawings;
   @override
   @JsonKey(ignore: true)
   _$$SketchImplCopyWith<_$SketchImpl> get copyWith =>

@@ -37,6 +37,11 @@ class _HomePageState extends State<HomePage> {
 
   bool _simulatePressure = true;
 
+  final availableShapesIconsTuple = <(ShapeTemplate, IconData)>[
+    (squareShape, Icons.square),
+    (isoscelesTriangleShape, Icons.change_history),
+  ];
+
   @override
   void initState() {
     notifier = ScribbleNotifier();
@@ -80,14 +85,15 @@ class _HomePageState extends State<HomePage> {
                       spacing: 16,
                       runSpacing: 16,
                       children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _buildColorToolbar(context),
-                            const VerticalDivider(width: 32),
-                            _buildStrokeToolbar(context),
-                          ],
-                        ),
+                        _buildColorToolbar(context),
+                        const VerticalDivider(width: 32),
+                        _buildStrokeToolbar(context),
+                        const VerticalDivider(width: 32),
+                        _buildToolToolbar(context),
+                        const VerticalDivider(width: 32),
+                        _buildShapeToolbar(context),
+                        const VerticalDivider(width: 32),
+                        _buildDrawModeToolbar(context),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -110,9 +116,15 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       ValueListenableBuilder(
-                        valueListenable: notifier.select((value) => value.lines
-                            .expand((element) => element.points)
-                            .length),
+                        valueListenable: notifier.select(
+                          (value) => value.drawings
+                              .expand(
+                                (drawing) => drawing is FreeSketchDrawing
+                                    ? drawing.points
+                                    : [],
+                              )
+                              .length,
+                        ),
                         builder: (context, value, child) =>
                             Text("Simplification:\n($value points)"),
                       ),
@@ -227,12 +239,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // List
   Widget _buildStrokeToolbar(BuildContext context) {
     return ValueListenableBuilder<ScribbleState>(
       valueListenable: notifier,
       builder: (context, state, _) => Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           for (final w in notifier.widths)
             _buildStrokeButton(
@@ -245,44 +259,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildStrokeButton(
-    BuildContext context, {
-    required double strokeWidth,
-    required ScribbleState state,
-  }) {
-    final selected = state.selectedWidth == strokeWidth;
-    return Padding(
-      padding: const EdgeInsets.all(4),
-      child: Material(
-        elevation: selected ? 4 : 0,
-        shape: const CircleBorder(),
-        child: InkWell(
-          onTap: () => notifier.setStrokeWidth(strokeWidth),
-          customBorder: const CircleBorder(),
-          child: AnimatedContainer(
-            duration: kThemeAnimationDuration,
-            width: strokeWidth * 2,
-            height: strokeWidth * 2,
-            decoration: BoxDecoration(
-                color: state.map(
-                  drawing: (s) => Color(s.selectedColor),
-                  erasing: (_) => Colors.transparent,
-                ),
-                border: state.map(
-                  drawing: (_) => null,
-                  erasing: (_) => Border.all(width: 1),
-                ),
-                borderRadius: BorderRadius.circular(50.0)),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildColorToolbar(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         _buildColorButton(context, color: Colors.black),
         _buildColorButton(context, color: Colors.red),
@@ -321,6 +302,96 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
+  Widget _buildToolToolbar(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: notifier.select((value) => value is Drawing),
+      builder: (context, value, child) => Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final tool in Tool.values)
+            _buildToolButton(
+              context,
+              tool,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShapeToolbar(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: notifier.select((value) => value is Drawing),
+      builder: (context, value, child) => Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final shapeIconTuple in availableShapesIconsTuple)
+            _buildShapeButton(
+              context,
+              shape: shapeIconTuple.$1,
+              icon: shapeIconTuple.$2,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDrawModeToolbar(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: notifier.select((value) => value is Drawing),
+      builder: (context, value, child) => Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final drawMode in DrawMode.values)
+            _buildDrawMode(
+              context,
+              drawMode: drawMode,
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Single
+  Widget _buildStrokeButton(
+    BuildContext context, {
+    required double strokeWidth,
+    required ScribbleState state,
+  }) {
+    final selected = state.selectedWidth == strokeWidth;
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Material(
+        elevation: selected ? 4 : 0,
+        shape: const CircleBorder(),
+        child: InkWell(
+          onTap: () => notifier.setStrokeWidth(strokeWidth),
+          customBorder: const CircleBorder(),
+          child: AnimatedContainer(
+            duration: kThemeAnimationDuration,
+            width: strokeWidth * 2,
+            height: strokeWidth * 2,
+            decoration: BoxDecoration(
+                color: state.map(
+                  drawing: (s) => Color(s.selectedColor),
+                  erasing: (_) => Colors.transparent,
+                ),
+                border: state.map(
+                  drawing: (_) => null,
+                  erasing: (_) => Border.all(width: 1),
+                ),
+                borderRadius: BorderRadius.circular(50.0)),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildEraserButton(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: notifier.select((value) => value is Erasing),
@@ -348,6 +419,75 @@ class _HomePageState extends State<HomePage> {
           isActive: value,
           onPressed: () => notifier.setColor(color),
         ),
+      ),
+    );
+  }
+
+  Widget _buildToolButton(BuildContext context, Tool tool) {
+    return ValueListenableBuilder(
+      valueListenable: notifier
+          .select((value) => value is Drawing && value.selectedTool == tool),
+      builder: (context, value, child) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: ColorButton(
+          color: Colors.transparent,
+          outlineColor: Colors.black,
+          isActive: value,
+          onPressed: () => notifier.setTool(tool),
+          child: Icon(
+            switch (tool) {
+              Tool.pen => Icons.mode_rounded,
+              Tool.highlighter => Icons.border_color_rounded,
+              Tool.tape => Icons.texture_rounded,
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShapeButton(
+    BuildContext context, {
+    required ShapeTemplate shape,
+    required IconData icon,
+  }) {
+    return ValueListenableBuilder(
+      valueListenable: notifier.select(
+        (value) => value is Drawing && value.selectedShape == shape,
+      ),
+      builder: (context, value, child) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: ColorButton(
+          color: Colors.transparent,
+          outlineColor: Colors.black,
+          isActive: value,
+          onPressed: () => notifier.setShape(shape),
+          child: Icon(icon),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDrawMode(
+    BuildContext context, {
+    required DrawMode drawMode,
+  }) {
+    return ValueListenableBuilder(
+      valueListenable: notifier.select(
+        (value) => value is Drawing && value.drawMode == drawMode,
+      ),
+      builder: (context, value, child) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: ColorButton(
+            color: Colors.transparent,
+            outlineColor: Colors.black,
+            isActive: value,
+            onPressed: () => notifier.setDrawMode(drawMode),
+            child: switch (drawMode) {
+              DrawMode.free => const Icon(Icons.edit),
+              DrawMode.line => const Icon(Icons.show_chart),
+              DrawMode.shape => const Icon(Icons.crop_square),
+            }),
       ),
     );
   }

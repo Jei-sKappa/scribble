@@ -3,6 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'point.freezed.dart';
 part 'point.g.dart';
 
+// TODO: Use vector_math's Point
+
 /// {@template point}
 /// Represents a point in a sketch with an x and y coordinate and an optional
 /// pressure value.

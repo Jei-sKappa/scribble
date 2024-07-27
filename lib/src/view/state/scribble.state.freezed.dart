@@ -32,6 +32,9 @@ mixin _$ScribbleState {
   /// The current state of the sketch
   Sketch get sketch => throw _privateConstructorUsedError;
 
+  /// The draw mode that is currently active
+  DrawMode get drawMode => throw _privateConstructorUsedError;
+
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
   ScribblePointerMode get allowedPointersMode =>
@@ -65,11 +68,15 @@ mixin _$ScribbleState {
 
   /// The currently selected tool
   Tool get selectedTool => throw _privateConstructorUsedError;
+
+  /// The currently selected shape
+  ShapeTemplate? get selectedShape => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -77,17 +84,20 @@ mixin _$ScribbleState {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)
         drawing,
     required TResult Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)
         erasing,
   }) =>
       throw _privateConstructorUsedError;
@@ -95,7 +105,8 @@ mixin _$ScribbleState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -103,17 +114,20 @@ mixin _$ScribbleState {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         drawing,
     TResult? Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         erasing,
   }) =>
       throw _privateConstructorUsedError;
@@ -121,7 +135,8 @@ mixin _$ScribbleState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -129,17 +144,20 @@ mixin _$ScribbleState {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         drawing,
     TResult Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         erasing,
     required TResult orElse(),
   }) =>
@@ -177,16 +195,19 @@ abstract class $ScribbleStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Sketch sketch,
+      DrawMode drawMode,
       ScribblePointerMode allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       double selectedWidth,
       double scaleFactor,
       double simplificationTolerance,
-      Tool selectedTool});
+      Tool selectedTool,
+      ShapeTemplate? selectedShape});
 
   $SketchCopyWith<$Res> get sketch;
   $PointCopyWith<$Res>? get pointerPosition;
+  $ShapeTemplateCopyWith<$Res>? get selectedShape;
 }
 
 /// @nodoc
@@ -203,6 +224,7 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
   @override
   $Res call({
     Object? sketch = null,
+    Object? drawMode = null,
     Object? allowedPointersMode = null,
     Object? activePointerIds = null,
     Object? pointerPosition = freezed,
@@ -210,12 +232,17 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
     Object? selectedTool = null,
+    Object? selectedShape = freezed,
   }) {
     return _then(_value.copyWith(
       sketch: null == sketch
           ? _value.sketch
           : sketch // ignore: cast_nullable_to_non_nullable
               as Sketch,
+      drawMode: null == drawMode
+          ? _value.drawMode
+          : drawMode // ignore: cast_nullable_to_non_nullable
+              as DrawMode,
       allowedPointersMode: null == allowedPointersMode
           ? _value.allowedPointersMode
           : allowedPointersMode // ignore: cast_nullable_to_non_nullable
@@ -244,6 +271,10 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
           ? _value.selectedTool
           : selectedTool // ignore: cast_nullable_to_non_nullable
               as Tool,
+      selectedShape: freezed == selectedShape
+          ? _value.selectedShape
+          : selectedShape // ignore: cast_nullable_to_non_nullable
+              as ShapeTemplate?,
     ) as $Val);
   }
 
@@ -266,6 +297,18 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
       return _then(_value.copyWith(pointerPosition: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ShapeTemplateCopyWith<$Res>? get selectedShape {
+    if (_value.selectedShape == null) {
+      return null;
+    }
+
+    return $ShapeTemplateCopyWith<$Res>(_value.selectedShape!, (value) {
+      return _then(_value.copyWith(selectedShape: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -278,7 +321,8 @@ abstract class _$$DrawingImplCopyWith<$Res>
   @useResult
   $Res call(
       {Sketch sketch,
-      SketchLine? activeLine,
+      DrawMode drawMode,
+      SketchDrawing? activeDrawing,
       ScribblePointerMode allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
@@ -286,13 +330,16 @@ abstract class _$$DrawingImplCopyWith<$Res>
       double selectedWidth,
       double scaleFactor,
       double simplificationTolerance,
-      Tool selectedTool});
+      Tool selectedTool,
+      ShapeTemplate? selectedShape});
 
   @override
   $SketchCopyWith<$Res> get sketch;
-  $SketchLineCopyWith<$Res>? get activeLine;
+  $SketchDrawingCopyWith<$Res>? get activeDrawing;
   @override
   $PointCopyWith<$Res>? get pointerPosition;
+  @override
+  $ShapeTemplateCopyWith<$Res>? get selectedShape;
 }
 
 /// @nodoc
@@ -307,7 +354,8 @@ class __$$DrawingImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? sketch = null,
-    Object? activeLine = freezed,
+    Object? drawMode = null,
+    Object? activeDrawing = freezed,
     Object? allowedPointersMode = null,
     Object? activePointerIds = null,
     Object? pointerPosition = freezed,
@@ -316,16 +364,21 @@ class __$$DrawingImplCopyWithImpl<$Res>
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
     Object? selectedTool = null,
+    Object? selectedShape = freezed,
   }) {
     return _then(_$DrawingImpl(
       sketch: null == sketch
           ? _value.sketch
           : sketch // ignore: cast_nullable_to_non_nullable
               as Sketch,
-      activeLine: freezed == activeLine
-          ? _value.activeLine
-          : activeLine // ignore: cast_nullable_to_non_nullable
-              as SketchLine?,
+      drawMode: null == drawMode
+          ? _value.drawMode
+          : drawMode // ignore: cast_nullable_to_non_nullable
+              as DrawMode,
+      activeDrawing: freezed == activeDrawing
+          ? _value.activeDrawing
+          : activeDrawing // ignore: cast_nullable_to_non_nullable
+              as SketchDrawing?,
       allowedPointersMode: null == allowedPointersMode
           ? _value.allowedPointersMode
           : allowedPointersMode // ignore: cast_nullable_to_non_nullable
@@ -358,18 +411,22 @@ class __$$DrawingImplCopyWithImpl<$Res>
           ? _value.selectedTool
           : selectedTool // ignore: cast_nullable_to_non_nullable
               as Tool,
+      selectedShape: freezed == selectedShape
+          ? _value.selectedShape
+          : selectedShape // ignore: cast_nullable_to_non_nullable
+              as ShapeTemplate?,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $SketchLineCopyWith<$Res>? get activeLine {
-    if (_value.activeLine == null) {
+  $SketchDrawingCopyWith<$Res>? get activeDrawing {
+    if (_value.activeDrawing == null) {
       return null;
     }
 
-    return $SketchLineCopyWith<$Res>(_value.activeLine!, (value) {
-      return _then(_value.copyWith(activeLine: value));
+    return $SketchDrawingCopyWith<$Res>(_value.activeDrawing!, (value) {
+      return _then(_value.copyWith(activeDrawing: value));
     });
   }
 }
@@ -379,7 +436,8 @@ class __$$DrawingImplCopyWithImpl<$Res>
 class _$DrawingImpl extends Drawing {
   const _$DrawingImpl(
       {required this.sketch,
-      this.activeLine,
+      this.drawMode = DrawMode.free,
+      this.activeDrawing,
       this.allowedPointersMode = ScribblePointerMode.all,
       final List<int> activePointerIds = const [],
       this.pointerPosition,
@@ -388,6 +446,7 @@ class _$DrawingImpl extends Drawing {
       this.scaleFactor = 1,
       this.simplificationTolerance = 0,
       this.selectedTool = Tool.pen,
+      this.selectedShape,
       final String? $type})
       : _activePointerIds = activePointerIds,
         $type = $type ?? 'drawing',
@@ -400,9 +459,14 @@ class _$DrawingImpl extends Drawing {
   @override
   final Sketch sketch;
 
-  /// The line that is currently being drawn
+  /// The draw mode that is currently active
   @override
-  final SketchLine? activeLine;
+  @JsonKey()
+  final DrawMode drawMode;
+
+  /// The drawing that is currently being drawn
+  @override
+  final SketchDrawing? activeDrawing;
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
@@ -464,12 +528,16 @@ class _$DrawingImpl extends Drawing {
   @JsonKey()
   final Tool selectedTool;
 
+  /// The currently selected shape
+  @override
+  final ShapeTemplate? selectedShape;
+
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'ScribbleState.drawing(sketch: $sketch, activeLine: $activeLine, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool)';
+    return 'ScribbleState.drawing(sketch: $sketch, drawMode: $drawMode, activeDrawing: $activeDrawing, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool, selectedShape: $selectedShape)';
   }
 
   @override
@@ -478,8 +546,10 @@ class _$DrawingImpl extends Drawing {
         (other.runtimeType == runtimeType &&
             other is _$DrawingImpl &&
             (identical(other.sketch, sketch) || other.sketch == sketch) &&
-            (identical(other.activeLine, activeLine) ||
-                other.activeLine == activeLine) &&
+            (identical(other.drawMode, drawMode) ||
+                other.drawMode == drawMode) &&
+            (identical(other.activeDrawing, activeDrawing) ||
+                other.activeDrawing == activeDrawing) &&
             (identical(other.allowedPointersMode, allowedPointersMode) ||
                 other.allowedPointersMode == allowedPointersMode) &&
             const DeepCollectionEquality()
@@ -496,7 +566,9 @@ class _$DrawingImpl extends Drawing {
                     other.simplificationTolerance, simplificationTolerance) ||
                 other.simplificationTolerance == simplificationTolerance) &&
             (identical(other.selectedTool, selectedTool) ||
-                other.selectedTool == selectedTool));
+                other.selectedTool == selectedTool) &&
+            (identical(other.selectedShape, selectedShape) ||
+                other.selectedShape == selectedShape));
   }
 
   @JsonKey(ignore: true)
@@ -504,7 +576,8 @@ class _$DrawingImpl extends Drawing {
   int get hashCode => Object.hash(
       runtimeType,
       sketch,
-      activeLine,
+      drawMode,
+      activeDrawing,
       allowedPointersMode,
       const DeepCollectionEquality().hash(_activePointerIds),
       pointerPosition,
@@ -512,7 +585,8 @@ class _$DrawingImpl extends Drawing {
       selectedWidth,
       scaleFactor,
       simplificationTolerance,
-      selectedTool);
+      selectedTool,
+      selectedShape);
 
   @JsonKey(ignore: true)
   @override
@@ -525,7 +599,8 @@ class _$DrawingImpl extends Drawing {
   TResult when<TResult extends Object?>({
     required TResult Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -533,22 +608,26 @@ class _$DrawingImpl extends Drawing {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)
         drawing,
     required TResult Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)
         erasing,
   }) {
     return drawing(
         sketch,
-        activeLine,
+        drawMode,
+        activeDrawing,
         allowedPointersMode,
         activePointerIds,
         pointerPosition,
@@ -556,7 +635,8 @@ class _$DrawingImpl extends Drawing {
         selectedWidth,
         scaleFactor,
         simplificationTolerance,
-        selectedTool);
+        selectedTool,
+        selectedShape);
   }
 
   @override
@@ -564,7 +644,8 @@ class _$DrawingImpl extends Drawing {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -572,22 +653,26 @@ class _$DrawingImpl extends Drawing {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         drawing,
     TResult? Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         erasing,
   }) {
     return drawing?.call(
         sketch,
-        activeLine,
+        drawMode,
+        activeDrawing,
         allowedPointersMode,
         activePointerIds,
         pointerPosition,
@@ -595,7 +680,8 @@ class _$DrawingImpl extends Drawing {
         selectedWidth,
         scaleFactor,
         simplificationTolerance,
-        selectedTool);
+        selectedTool,
+        selectedShape);
   }
 
   @override
@@ -603,7 +689,8 @@ class _$DrawingImpl extends Drawing {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -611,24 +698,28 @@ class _$DrawingImpl extends Drawing {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         drawing,
     TResult Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         erasing,
     required TResult orElse(),
   }) {
     if (drawing != null) {
       return drawing(
           sketch,
-          activeLine,
+          drawMode,
+          activeDrawing,
           allowedPointersMode,
           activePointerIds,
           pointerPosition,
@@ -636,7 +727,8 @@ class _$DrawingImpl extends Drawing {
           selectedWidth,
           scaleFactor,
           simplificationTolerance,
-          selectedTool);
+          selectedTool,
+          selectedShape);
     }
     return orElse();
   }
@@ -683,7 +775,8 @@ class _$DrawingImpl extends Drawing {
 abstract class Drawing extends ScribbleState {
   const factory Drawing(
       {required final Sketch sketch,
-      final SketchLine? activeLine,
+      final DrawMode drawMode,
+      final SketchDrawing? activeDrawing,
       final ScribblePointerMode allowedPointersMode,
       final List<int> activePointerIds,
       final Point? pointerPosition,
@@ -691,7 +784,8 @@ abstract class Drawing extends ScribbleState {
       final double selectedWidth,
       final double scaleFactor,
       final double simplificationTolerance,
-      final Tool selectedTool}) = _$DrawingImpl;
+      final Tool selectedTool,
+      final ShapeTemplate? selectedShape}) = _$DrawingImpl;
   const Drawing._() : super._();
 
   factory Drawing.fromJson(Map<String, dynamic> json) = _$DrawingImpl.fromJson;
@@ -700,9 +794,13 @@ abstract class Drawing extends ScribbleState {
 
   /// The current state of the sketch
   Sketch get sketch;
+  @override
 
-  /// The line that is currently being drawn
-  SketchLine? get activeLine;
+  /// The draw mode that is currently active
+  DrawMode get drawMode;
+
+  /// The drawing that is currently being drawn
+  SketchDrawing? get activeDrawing;
   @override
 
   /// Which pointers are allowed for drawing and will be captured by the
@@ -747,6 +845,10 @@ abstract class Drawing extends ScribbleState {
   /// The currently selected tool
   Tool get selectedTool;
   @override
+
+  /// The currently selected shape
+  ShapeTemplate? get selectedShape;
+  @override
   @JsonKey(ignore: true)
   _$$DrawingImplCopyWith<_$DrawingImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -762,18 +864,22 @@ abstract class _$$ErasingImplCopyWith<$Res>
   @useResult
   $Res call(
       {Sketch sketch,
+      DrawMode drawMode,
       ScribblePointerMode allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       double selectedWidth,
       double scaleFactor,
       double simplificationTolerance,
-      Tool selectedTool});
+      Tool selectedTool,
+      ShapeTemplate? selectedShape});
 
   @override
   $SketchCopyWith<$Res> get sketch;
   @override
   $PointCopyWith<$Res>? get pointerPosition;
+  @override
+  $ShapeTemplateCopyWith<$Res>? get selectedShape;
 }
 
 /// @nodoc
@@ -788,6 +894,7 @@ class __$$ErasingImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? sketch = null,
+    Object? drawMode = null,
     Object? allowedPointersMode = null,
     Object? activePointerIds = null,
     Object? pointerPosition = freezed,
@@ -795,12 +902,17 @@ class __$$ErasingImplCopyWithImpl<$Res>
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
     Object? selectedTool = null,
+    Object? selectedShape = freezed,
   }) {
     return _then(_$ErasingImpl(
       sketch: null == sketch
           ? _value.sketch
           : sketch // ignore: cast_nullable_to_non_nullable
               as Sketch,
+      drawMode: null == drawMode
+          ? _value.drawMode
+          : drawMode // ignore: cast_nullable_to_non_nullable
+              as DrawMode,
       allowedPointersMode: null == allowedPointersMode
           ? _value.allowedPointersMode
           : allowedPointersMode // ignore: cast_nullable_to_non_nullable
@@ -829,6 +941,10 @@ class __$$ErasingImplCopyWithImpl<$Res>
           ? _value.selectedTool
           : selectedTool // ignore: cast_nullable_to_non_nullable
               as Tool,
+      selectedShape: freezed == selectedShape
+          ? _value.selectedShape
+          : selectedShape // ignore: cast_nullable_to_non_nullable
+              as ShapeTemplate?,
     ));
   }
 }
@@ -838,6 +954,7 @@ class __$$ErasingImplCopyWithImpl<$Res>
 class _$ErasingImpl extends Erasing {
   const _$ErasingImpl(
       {required this.sketch,
+      this.drawMode = DrawMode.free,
       this.allowedPointersMode = ScribblePointerMode.all,
       final List<int> activePointerIds = const [],
       this.pointerPosition,
@@ -845,6 +962,7 @@ class _$ErasingImpl extends Erasing {
       this.scaleFactor = 1,
       this.simplificationTolerance = 0,
       this.selectedTool = Tool.pen,
+      this.selectedShape,
       final String? $type})
       : _activePointerIds = activePointerIds,
         $type = $type ?? 'erasing',
@@ -856,6 +974,11 @@ class _$ErasingImpl extends Erasing {
   /// The current state of the sketch
   @override
   final Sketch sketch;
+
+  /// The draw mode that is currently active
+  @override
+  @JsonKey()
+  final DrawMode drawMode;
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
@@ -908,12 +1031,16 @@ class _$ErasingImpl extends Erasing {
   @JsonKey()
   final Tool selectedTool;
 
+  /// The currently selected shape
+  @override
+  final ShapeTemplate? selectedShape;
+
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'ScribbleState.erasing(sketch: $sketch, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool)';
+    return 'ScribbleState.erasing(sketch: $sketch, drawMode: $drawMode, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool, selectedShape: $selectedShape)';
   }
 
   @override
@@ -922,6 +1049,8 @@ class _$ErasingImpl extends Erasing {
         (other.runtimeType == runtimeType &&
             other is _$ErasingImpl &&
             (identical(other.sketch, sketch) || other.sketch == sketch) &&
+            (identical(other.drawMode, drawMode) ||
+                other.drawMode == drawMode) &&
             (identical(other.allowedPointersMode, allowedPointersMode) ||
                 other.allowedPointersMode == allowedPointersMode) &&
             const DeepCollectionEquality()
@@ -936,7 +1065,9 @@ class _$ErasingImpl extends Erasing {
                     other.simplificationTolerance, simplificationTolerance) ||
                 other.simplificationTolerance == simplificationTolerance) &&
             (identical(other.selectedTool, selectedTool) ||
-                other.selectedTool == selectedTool));
+                other.selectedTool == selectedTool) &&
+            (identical(other.selectedShape, selectedShape) ||
+                other.selectedShape == selectedShape));
   }
 
   @JsonKey(ignore: true)
@@ -944,13 +1075,15 @@ class _$ErasingImpl extends Erasing {
   int get hashCode => Object.hash(
       runtimeType,
       sketch,
+      drawMode,
       allowedPointersMode,
       const DeepCollectionEquality().hash(_activePointerIds),
       pointerPosition,
       selectedWidth,
       scaleFactor,
       simplificationTolerance,
-      selectedTool);
+      selectedTool,
+      selectedShape);
 
   @JsonKey(ignore: true)
   @override
@@ -963,7 +1096,8 @@ class _$ErasingImpl extends Erasing {
   TResult when<TResult extends Object?>({
     required TResult Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -971,28 +1105,33 @@ class _$ErasingImpl extends Erasing {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)
         drawing,
     required TResult Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)
         erasing,
   }) {
     return erasing(
         sketch,
+        drawMode,
         allowedPointersMode,
         activePointerIds,
         pointerPosition,
         selectedWidth,
         scaleFactor,
         simplificationTolerance,
-        selectedTool);
+        selectedTool,
+        selectedShape);
   }
 
   @override
@@ -1000,7 +1139,8 @@ class _$ErasingImpl extends Erasing {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -1008,28 +1148,33 @@ class _$ErasingImpl extends Erasing {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         drawing,
     TResult? Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         erasing,
   }) {
     return erasing?.call(
         sketch,
+        drawMode,
         allowedPointersMode,
         activePointerIds,
         pointerPosition,
         selectedWidth,
         scaleFactor,
         simplificationTolerance,
-        selectedTool);
+        selectedTool,
+        selectedShape);
   }
 
   @override
@@ -1037,7 +1182,8 @@ class _$ErasingImpl extends Erasing {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
             Sketch sketch,
-            SketchLine? activeLine,
+            DrawMode drawMode,
+            SketchDrawing? activeDrawing,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
@@ -1045,30 +1191,35 @@ class _$ErasingImpl extends Erasing {
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         drawing,
     TResult Function(
             Sketch sketch,
+            DrawMode drawMode,
             ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
             double simplificationTolerance,
-            Tool selectedTool)?
+            Tool selectedTool,
+            ShapeTemplate? selectedShape)?
         erasing,
     required TResult orElse(),
   }) {
     if (erasing != null) {
       return erasing(
           sketch,
+          drawMode,
           allowedPointersMode,
           activePointerIds,
           pointerPosition,
           selectedWidth,
           scaleFactor,
           simplificationTolerance,
-          selectedTool);
+          selectedTool,
+          selectedShape);
     }
     return orElse();
   }
@@ -1115,13 +1266,15 @@ class _$ErasingImpl extends Erasing {
 abstract class Erasing extends ScribbleState {
   const factory Erasing(
       {required final Sketch sketch,
+      final DrawMode drawMode,
       final ScribblePointerMode allowedPointersMode,
       final List<int> activePointerIds,
       final Point? pointerPosition,
       final double selectedWidth,
       final double scaleFactor,
       final double simplificationTolerance,
-      final Tool selectedTool}) = _$ErasingImpl;
+      final Tool selectedTool,
+      final ShapeTemplate? selectedShape}) = _$ErasingImpl;
   const Erasing._() : super._();
 
   factory Erasing.fromJson(Map<String, dynamic> json) = _$ErasingImpl.fromJson;
@@ -1130,6 +1283,10 @@ abstract class Erasing extends ScribbleState {
 
   /// The current state of the sketch
   Sketch get sketch;
+  @override
+
+  /// The draw mode that is currently active
+  DrawMode get drawMode;
   @override
 
   /// Which pointers are allowed for drawing and will be captured by the
@@ -1166,6 +1323,10 @@ abstract class Erasing extends ScribbleState {
 
   /// The currently selected tool
   Tool get selectedTool;
+  @override
+
+  /// The currently selected shape
+  ShapeTemplate? get selectedShape;
   @override
   @JsonKey(ignore: true)
   _$$ErasingImplCopyWith<_$ErasingImpl> get copyWith =>
