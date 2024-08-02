@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:scribble/src/domain/model/sketch/sketch.dart';
 import 'package:scribble/src/view/painting/scribble_painter.dart';
+import 'package:touchable/touchable.dart';
 
 /// {@template scribble_sketch}
 /// A widget for displaying a scribble sketch without any input functionalities.
@@ -31,12 +32,21 @@ class ScribbleSketch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: ScribblePainter(
-        sketch: sketch,
-        scaleFactor: scaleFactor,
-        simulatePressure: simulatePressure,
-      ),
+    return CanvasTouchDetector(
+      gesturesToOverride: const [
+        GestureType.onTapUp,
+        GestureType.onPanUpdate,
+      ],
+      builder: (context) {
+        return CustomPaint(
+          painter: ScribblePainter(
+            canvasTouchDetectorContext: context,
+            sketch: sketch,
+            scaleFactor: scaleFactor,
+            simulatePressure: simulatePressure,
+          ),
+        );
+      },
     );
   }
 }

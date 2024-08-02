@@ -12,6 +12,10 @@ part 'sketch_drawing.g.dart';
 sealed class SketchDrawing with _$SketchDrawing {
   /// The [SketchDrawing] when the user is drawing freely on the canvas.
   const factory SketchDrawing.free({
+    // TODO(Jei-sKappa): The id should not be required and should be nullable. If null generate a new id here.
+    /// The id of the drawing
+    required Object id,
+
     /// The line that is currently being drawn
     required List<Point> points,
 
@@ -28,6 +32,9 @@ sealed class SketchDrawing with _$SketchDrawing {
   /// The [SketchDrawing] when the user is drawing a straight line on the
   /// canvas.
   const factory SketchDrawing.line({
+    /// The id of the drawing
+    required Object id,
+
     /// The starting point of the line
     required Point anchorPoint,
 
@@ -46,6 +53,9 @@ sealed class SketchDrawing with _$SketchDrawing {
 
   /// The [SketchDrawing] when the user is drawing a shape on the canvas.
   const factory SketchDrawing.shape({
+    /// The id of the drawing
+    required Object id,
+
     /// The starting point of the shape
     required Point anchorPoint,
 

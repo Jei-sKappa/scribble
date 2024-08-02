@@ -9,6 +9,7 @@ part of 'sketch_drawing.dart';
 _$FreeSketchDrawingImpl _$$FreeSketchDrawingImplFromJson(
         Map<String, dynamic> json) =>
     _$FreeSketchDrawingImpl(
+      id: json['id'] as Object,
       points: (json['points'] as List<dynamic>)
           .map((e) => Point.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -21,6 +22,7 @@ _$FreeSketchDrawingImpl _$$FreeSketchDrawingImplFromJson(
 Map<String, dynamic> _$$FreeSketchDrawingImplToJson(
         _$FreeSketchDrawingImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'points': instance.points.map((e) => e.toJson()).toList(),
       'color': instance.color,
       'width': instance.width,
@@ -37,6 +39,7 @@ const _$ToolEnumMap = {
 _$LineSketchDrawingImpl _$$LineSketchDrawingImplFromJson(
         Map<String, dynamic> json) =>
     _$LineSketchDrawingImpl(
+      id: json['id'] as Object,
       anchorPoint: Point.fromJson(json['anchorPoint'] as Map<String, dynamic>),
       endPoint: Point.fromJson(json['endPoint'] as Map<String, dynamic>),
       color: (json['color'] as num).toInt(),
@@ -48,6 +51,7 @@ _$LineSketchDrawingImpl _$$LineSketchDrawingImplFromJson(
 Map<String, dynamic> _$$LineSketchDrawingImplToJson(
         _$LineSketchDrawingImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'anchorPoint': instance.anchorPoint.toJson(),
       'endPoint': instance.endPoint.toJson(),
       'color': instance.color,
@@ -59,6 +63,7 @@ Map<String, dynamic> _$$LineSketchDrawingImplToJson(
 _$ShapeSketchDrawingImpl _$$ShapeSketchDrawingImplFromJson(
         Map<String, dynamic> json) =>
     _$ShapeSketchDrawingImpl(
+      id: json['id'] as Object,
       anchorPoint: Point.fromJson(json['anchorPoint'] as Map<String, dynamic>),
       endPoint: Point.fromJson(json['endPoint'] as Map<String, dynamic>),
       shapeTemplate:
@@ -73,6 +78,7 @@ _$ShapeSketchDrawingImpl _$$ShapeSketchDrawingImplFromJson(
 Map<String, dynamic> _$$ShapeSketchDrawingImplToJson(
         _$ShapeSketchDrawingImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'anchorPoint': instance.anchorPoint.toJson(),
       'endPoint': instance.endPoint.toJson(),
       'shapeTemplate': instance.shapeTemplate.toJson(),

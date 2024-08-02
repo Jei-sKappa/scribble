@@ -11,6 +11,13 @@ import 'package:scribble/src/view/painting/shape_sketch_draw_polygon_extension.d
 import 'package:scribble/src/view/simplification/sketch_simplifier.dart';
 import 'package:value_notifier_tools/value_notifier_tools.dart';
 
+// TODO: Move this into a more appropriate place
+int _generateUnsecureId(ScribbleState state) {
+  final lastId =
+      state.sketch.drawings.isEmpty ? 0 : state.sketch.drawings.last.id as int;
+  return lastId + 1;
+}
+
 /// {@template scribble_notifier_base}
 /// The base class for a notifier that controls the state of a [Scribble]
 /// widget.
@@ -87,6 +94,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
     /// If you pass a sketch here, the notifier will use that sketch as a
     /// starting point.
     Sketch? sketch,
+    Object Function(ScribbleState state)? idGenerator,
 
     // TODO(Jei-sKappa): Create the option to assing a tool based on the pointer type
     /// Which pointers can be drawn with and are captured.
@@ -101,7 +109,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
     /// {@macro view.state.scribble_state.simplification_tolerance}
     double simplificationTolerance = 0,
-  }) : super(
+  })  : idGenerator = idGenerator ?? _generateUnsecureId,
+        super(
           ScribbleState.drawing(
             sketch: switch (sketch) {
               Sketch() => simplifier.simplifySketch(
@@ -117,6 +126,12 @@ class ScribbleNotifier extends ScribbleNotifierBase
         ) {
     this.maxHistoryLength = maxHistoryLength;
   }
+
+  /// A function that generates an identifier for a drawing in the sketch.
+  ///
+  /// The [idGenerator] function takes a [ScribbleState] object as input and
+  /// returns an identifier.
+  final Object Function(ScribbleState state) idGenerator;
 
   /// The supported widths, mainly useful for rendering UI, you can still set
   /// the width to any arbitrary value from code.
@@ -408,11 +423,14 @@ class ScribbleNotifier extends ScribbleNotifierBase
         }
       }
 
+      final id = idGenerator(s);
+
       // Handle actual tap
       switch (s.drawMode) {
         case DrawMode.free:
           s = s.copyWith(
             activeDrawing: FreeSketchDrawing(
+              id: id,
               points: [_getPointFromEvent(event)],
               color: s.selectedColor,
               width: s.selectedWidth / s.scaleFactor,
@@ -422,6 +440,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
         case DrawMode.line:
           s = s.copyWith(
             activeDrawing: LineSketchDrawing(
+              id: id,
               anchorPoint: _getPointFromEvent(event),
               endPoint: _getPointFromEvent(event),
               color: s.selectedColor,
@@ -432,6 +451,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
         case DrawMode.shape:
           s = s.copyWith(
             activeDrawing: ShapeSketchDrawing(
+              id: id,
               anchorPoint: _getPointFromEvent(event),
               endPoint: _getPointFromEvent(event),
               shapeTemplate: s.selectedShape ?? squareShape,

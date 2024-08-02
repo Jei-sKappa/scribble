@@ -31,6 +31,9 @@ SketchDrawing _$SketchDrawingFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SketchDrawing {
+  /// The id of the drawing
+  Object get id => throw _privateConstructorUsedError;
+
   /// The color of the line in hexadecimal format (ARGB)
   int get color => throw _privateConstructorUsedError;
 
@@ -42,12 +45,13 @@ mixin _$SketchDrawing {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            List<Point> points, int color, double width, Tool tool)
+            Object id, List<Point> points, int color, double width, Tool tool)
         free,
-    required TResult Function(Point anchorPoint, Point endPoint, int color,
-            double width, Tool tool)
+    required TResult Function(Object id, Point anchorPoint, Point endPoint,
+            int color, double width, Tool tool)
         line,
     required TResult Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -60,12 +64,14 @@ mixin _$SketchDrawing {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<Point> points, int color, double width, Tool tool)?
+    TResult? Function(
+            Object id, List<Point> points, int color, double width, Tool tool)?
         free,
-    TResult? Function(Point anchorPoint, Point endPoint, int color,
+    TResult? Function(Object id, Point anchorPoint, Point endPoint, int color,
             double width, Tool tool)?
         line,
     TResult? Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -78,12 +84,14 @@ mixin _$SketchDrawing {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Point> points, int color, double width, Tool tool)?
+    TResult Function(
+            Object id, List<Point> points, int color, double width, Tool tool)?
         free,
-    TResult Function(Point anchorPoint, Point endPoint, int color, double width,
-            Tool tool)?
+    TResult Function(Object id, Point anchorPoint, Point endPoint, int color,
+            double width, Tool tool)?
         line,
     TResult Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -129,7 +137,7 @@ abstract class $SketchDrawingCopyWith<$Res> {
           SketchDrawing value, $Res Function(SketchDrawing) then) =
       _$SketchDrawingCopyWithImpl<$Res, SketchDrawing>;
   @useResult
-  $Res call({int color, double width, Tool tool});
+  $Res call({Object id, int color, double width, Tool tool});
 }
 
 /// @nodoc
@@ -145,11 +153,13 @@ class _$SketchDrawingCopyWithImpl<$Res, $Val extends SketchDrawing>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? color = null,
     Object? width = null,
     Object? tool = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id ? _value.id : id,
       color: null == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -174,7 +184,8 @@ abstract class _$$FreeSketchDrawingImplCopyWith<$Res>
       __$$FreeSketchDrawingImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Point> points, int color, double width, Tool tool});
+  $Res call(
+      {Object id, List<Point> points, int color, double width, Tool tool});
 }
 
 /// @nodoc
@@ -188,12 +199,14 @@ class __$$FreeSketchDrawingImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? points = null,
     Object? color = null,
     Object? width = null,
     Object? tool = null,
   }) {
     return _then(_$FreeSketchDrawingImpl(
+      id: null == id ? _value.id : id,
       points: null == points
           ? _value._points
           : points // ignore: cast_nullable_to_non_nullable
@@ -218,7 +231,8 @@ class __$$FreeSketchDrawingImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
   const _$FreeSketchDrawingImpl(
-      {required final List<Point> points,
+      {required this.id,
+      required final List<Point> points,
       required this.color,
       required this.width,
       this.tool = Tool.pen,
@@ -229,6 +243,10 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
 
   factory _$FreeSketchDrawingImpl.fromJson(Map<String, dynamic> json) =>
       _$$FreeSketchDrawingImplFromJson(json);
+
+  /// The id of the drawing
+  @override
+  final Object id;
 
   /// The line that is currently being drawn
   final List<Point> _points;
@@ -259,7 +277,7 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
 
   @override
   String toString() {
-    return 'SketchDrawing.free(points: $points, color: $color, width: $width, tool: $tool)';
+    return 'SketchDrawing.free(id: $id, points: $points, color: $color, width: $width, tool: $tool)';
   }
 
   @override
@@ -267,6 +285,7 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FreeSketchDrawingImpl &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other._points, _points) &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.width, width) || other.width == width) &&
@@ -275,8 +294,13 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_points), color, width, tool);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(_points),
+      color,
+      width,
+      tool);
 
   @JsonKey(ignore: true)
   @override
@@ -289,12 +313,13 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            List<Point> points, int color, double width, Tool tool)
+            Object id, List<Point> points, int color, double width, Tool tool)
         free,
-    required TResult Function(Point anchorPoint, Point endPoint, int color,
-            double width, Tool tool)
+    required TResult Function(Object id, Point anchorPoint, Point endPoint,
+            int color, double width, Tool tool)
         line,
     required TResult Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -304,18 +329,20 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
             Tool tool)
         shape,
   }) {
-    return free(points, color, width, tool);
+    return free(id, points, color, width, tool);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<Point> points, int color, double width, Tool tool)?
+    TResult? Function(
+            Object id, List<Point> points, int color, double width, Tool tool)?
         free,
-    TResult? Function(Point anchorPoint, Point endPoint, int color,
+    TResult? Function(Object id, Point anchorPoint, Point endPoint, int color,
             double width, Tool tool)?
         line,
     TResult? Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -325,18 +352,20 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
             Tool tool)?
         shape,
   }) {
-    return free?.call(points, color, width, tool);
+    return free?.call(id, points, color, width, tool);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Point> points, int color, double width, Tool tool)?
+    TResult Function(
+            Object id, List<Point> points, int color, double width, Tool tool)?
         free,
-    TResult Function(Point anchorPoint, Point endPoint, int color, double width,
-            Tool tool)?
+    TResult Function(Object id, Point anchorPoint, Point endPoint, int color,
+            double width, Tool tool)?
         line,
     TResult Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -348,7 +377,7 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
     required TResult orElse(),
   }) {
     if (free != null) {
-      return free(points, color, width, tool);
+      return free(id, points, color, width, tool);
     }
     return orElse();
   }
@@ -397,7 +426,8 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
 
 abstract class FreeSketchDrawing extends SketchDrawing {
   const factory FreeSketchDrawing(
-      {required final List<Point> points,
+      {required final Object id,
+      required final List<Point> points,
       required final int color,
       required final double width,
       final Tool tool}) = _$FreeSketchDrawingImpl;
@@ -405,6 +435,11 @@ abstract class FreeSketchDrawing extends SketchDrawing {
 
   factory FreeSketchDrawing.fromJson(Map<String, dynamic> json) =
       _$FreeSketchDrawingImpl.fromJson;
+
+  @override
+
+  /// The id of the drawing
+  Object get id;
 
   /// The line that is currently being drawn
   List<Point> get points;
@@ -435,7 +470,12 @@ abstract class _$$LineSketchDrawingImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Point anchorPoint, Point endPoint, int color, double width, Tool tool});
+      {Object id,
+      Point anchorPoint,
+      Point endPoint,
+      int color,
+      double width,
+      Tool tool});
 
   $PointCopyWith<$Res> get anchorPoint;
   $PointCopyWith<$Res> get endPoint;
@@ -452,6 +492,7 @@ class __$$LineSketchDrawingImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? anchorPoint = null,
     Object? endPoint = null,
     Object? color = null,
@@ -459,6 +500,7 @@ class __$$LineSketchDrawingImplCopyWithImpl<$Res>
     Object? tool = null,
   }) {
     return _then(_$LineSketchDrawingImpl(
+      id: null == id ? _value.id : id,
       anchorPoint: null == anchorPoint
           ? _value.anchorPoint
           : anchorPoint // ignore: cast_nullable_to_non_nullable
@@ -503,7 +545,8 @@ class __$$LineSketchDrawingImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LineSketchDrawingImpl extends LineSketchDrawing {
   const _$LineSketchDrawingImpl(
-      {required this.anchorPoint,
+      {required this.id,
+      required this.anchorPoint,
       required this.endPoint,
       required this.color,
       required this.width,
@@ -514,6 +557,10 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
 
   factory _$LineSketchDrawingImpl.fromJson(Map<String, dynamic> json) =>
       _$$LineSketchDrawingImplFromJson(json);
+
+  /// The id of the drawing
+  @override
+  final Object id;
 
   /// The starting point of the line
   @override
@@ -541,7 +588,7 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
 
   @override
   String toString() {
-    return 'SketchDrawing.line(anchorPoint: $anchorPoint, endPoint: $endPoint, color: $color, width: $width, tool: $tool)';
+    return 'SketchDrawing.line(id: $id, anchorPoint: $anchorPoint, endPoint: $endPoint, color: $color, width: $width, tool: $tool)';
   }
 
   @override
@@ -549,6 +596,7 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LineSketchDrawingImpl &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.anchorPoint, anchorPoint) ||
                 other.anchorPoint == anchorPoint) &&
             (identical(other.endPoint, endPoint) ||
@@ -560,8 +608,14 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, anchorPoint, endPoint, color, width, tool);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      anchorPoint,
+      endPoint,
+      color,
+      width,
+      tool);
 
   @JsonKey(ignore: true)
   @override
@@ -574,12 +628,13 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            List<Point> points, int color, double width, Tool tool)
+            Object id, List<Point> points, int color, double width, Tool tool)
         free,
-    required TResult Function(Point anchorPoint, Point endPoint, int color,
-            double width, Tool tool)
+    required TResult Function(Object id, Point anchorPoint, Point endPoint,
+            int color, double width, Tool tool)
         line,
     required TResult Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -589,18 +644,20 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
             Tool tool)
         shape,
   }) {
-    return line(anchorPoint, endPoint, color, width, tool);
+    return line(id, anchorPoint, endPoint, color, width, tool);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<Point> points, int color, double width, Tool tool)?
+    TResult? Function(
+            Object id, List<Point> points, int color, double width, Tool tool)?
         free,
-    TResult? Function(Point anchorPoint, Point endPoint, int color,
+    TResult? Function(Object id, Point anchorPoint, Point endPoint, int color,
             double width, Tool tool)?
         line,
     TResult? Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -610,18 +667,20 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
             Tool tool)?
         shape,
   }) {
-    return line?.call(anchorPoint, endPoint, color, width, tool);
+    return line?.call(id, anchorPoint, endPoint, color, width, tool);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Point> points, int color, double width, Tool tool)?
+    TResult Function(
+            Object id, List<Point> points, int color, double width, Tool tool)?
         free,
-    TResult Function(Point anchorPoint, Point endPoint, int color, double width,
-            Tool tool)?
+    TResult Function(Object id, Point anchorPoint, Point endPoint, int color,
+            double width, Tool tool)?
         line,
     TResult Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -633,7 +692,7 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
     required TResult orElse(),
   }) {
     if (line != null) {
-      return line(anchorPoint, endPoint, color, width, tool);
+      return line(id, anchorPoint, endPoint, color, width, tool);
     }
     return orElse();
   }
@@ -682,7 +741,8 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
 
 abstract class LineSketchDrawing extends SketchDrawing {
   const factory LineSketchDrawing(
-      {required final Point anchorPoint,
+      {required final Object id,
+      required final Point anchorPoint,
       required final Point endPoint,
       required final int color,
       required final double width,
@@ -691,6 +751,11 @@ abstract class LineSketchDrawing extends SketchDrawing {
 
   factory LineSketchDrawing.fromJson(Map<String, dynamic> json) =
       _$LineSketchDrawingImpl.fromJson;
+
+  @override
+
+  /// The id of the drawing
+  Object get id;
 
   /// The starting point of the line
   Point get anchorPoint;
@@ -724,7 +789,8 @@ abstract class _$$ShapeSketchDrawingImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Point anchorPoint,
+      {Object id,
+      Point anchorPoint,
       Point endPoint,
       ShapeTemplate shapeTemplate,
       bool isFilled,
@@ -748,6 +814,7 @@ class __$$ShapeSketchDrawingImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? anchorPoint = null,
     Object? endPoint = null,
     Object? shapeTemplate = null,
@@ -757,6 +824,7 @@ class __$$ShapeSketchDrawingImplCopyWithImpl<$Res>
     Object? tool = null,
   }) {
     return _then(_$ShapeSketchDrawingImpl(
+      id: null == id ? _value.id : id,
       anchorPoint: null == anchorPoint
           ? _value.anchorPoint
           : anchorPoint // ignore: cast_nullable_to_non_nullable
@@ -817,7 +885,8 @@ class __$$ShapeSketchDrawingImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
   const _$ShapeSketchDrawingImpl(
-      {required this.anchorPoint,
+      {required this.id,
+      required this.anchorPoint,
       required this.endPoint,
       required this.shapeTemplate,
       required this.isFilled,
@@ -830,6 +899,10 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
 
   factory _$ShapeSketchDrawingImpl.fromJson(Map<String, dynamic> json) =>
       _$$ShapeSketchDrawingImplFromJson(json);
+
+  /// The id of the drawing
+  @override
+  final Object id;
 
   /// The starting point of the shape
   @override
@@ -865,7 +938,7 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
 
   @override
   String toString() {
-    return 'SketchDrawing.shape(anchorPoint: $anchorPoint, endPoint: $endPoint, shapeTemplate: $shapeTemplate, isFilled: $isFilled, color: $color, width: $width, tool: $tool)';
+    return 'SketchDrawing.shape(id: $id, anchorPoint: $anchorPoint, endPoint: $endPoint, shapeTemplate: $shapeTemplate, isFilled: $isFilled, color: $color, width: $width, tool: $tool)';
   }
 
   @override
@@ -873,6 +946,7 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ShapeSketchDrawingImpl &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.anchorPoint, anchorPoint) ||
                 other.anchorPoint == anchorPoint) &&
             (identical(other.endPoint, endPoint) ||
@@ -888,8 +962,16 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, anchorPoint, endPoint,
-      shapeTemplate, isFilled, color, width, tool);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      anchorPoint,
+      endPoint,
+      shapeTemplate,
+      isFilled,
+      color,
+      width,
+      tool);
 
   @JsonKey(ignore: true)
   @override
@@ -902,12 +984,13 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            List<Point> points, int color, double width, Tool tool)
+            Object id, List<Point> points, int color, double width, Tool tool)
         free,
-    required TResult Function(Point anchorPoint, Point endPoint, int color,
-            double width, Tool tool)
+    required TResult Function(Object id, Point anchorPoint, Point endPoint,
+            int color, double width, Tool tool)
         line,
     required TResult Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -918,18 +1001,20 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
         shape,
   }) {
     return shape(
-        anchorPoint, endPoint, shapeTemplate, isFilled, color, width, tool);
+        id, anchorPoint, endPoint, shapeTemplate, isFilled, color, width, tool);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<Point> points, int color, double width, Tool tool)?
+    TResult? Function(
+            Object id, List<Point> points, int color, double width, Tool tool)?
         free,
-    TResult? Function(Point anchorPoint, Point endPoint, int color,
+    TResult? Function(Object id, Point anchorPoint, Point endPoint, int color,
             double width, Tool tool)?
         line,
     TResult? Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -940,18 +1025,20 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
         shape,
   }) {
     return shape?.call(
-        anchorPoint, endPoint, shapeTemplate, isFilled, color, width, tool);
+        id, anchorPoint, endPoint, shapeTemplate, isFilled, color, width, tool);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Point> points, int color, double width, Tool tool)?
+    TResult Function(
+            Object id, List<Point> points, int color, double width, Tool tool)?
         free,
-    TResult Function(Point anchorPoint, Point endPoint, int color, double width,
-            Tool tool)?
+    TResult Function(Object id, Point anchorPoint, Point endPoint, int color,
+            double width, Tool tool)?
         line,
     TResult Function(
+            Object id,
             Point anchorPoint,
             Point endPoint,
             ShapeTemplate shapeTemplate,
@@ -963,8 +1050,8 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
     required TResult orElse(),
   }) {
     if (shape != null) {
-      return shape(
-          anchorPoint, endPoint, shapeTemplate, isFilled, color, width, tool);
+      return shape(id, anchorPoint, endPoint, shapeTemplate, isFilled, color,
+          width, tool);
     }
     return orElse();
   }
@@ -1013,7 +1100,8 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
 
 abstract class ShapeSketchDrawing extends SketchDrawing {
   const factory ShapeSketchDrawing(
-      {required final Point anchorPoint,
+      {required final Object id,
+      required final Point anchorPoint,
       required final Point endPoint,
       required final ShapeTemplate shapeTemplate,
       required final bool isFilled,
@@ -1024,6 +1112,11 @@ abstract class ShapeSketchDrawing extends SketchDrawing {
 
   factory ShapeSketchDrawing.fromJson(Map<String, dynamic> json) =
       _$ShapeSketchDrawingImpl.fromJson;
+
+  @override
+
+  /// The id of the drawing
+  Object get id;
 
   /// The starting point of the shape
   Point get anchorPoint;

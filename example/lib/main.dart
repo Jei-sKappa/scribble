@@ -70,6 +70,9 @@ class _HomePageState extends State<HomePage> {
                   notifier: notifier,
                   drawPen: true,
                   simulatePressure: _simulatePressure,
+                  onTap: (details, drawing) {
+                    print("Tapped on $drawing");
+                  },
                 ),
               ),
             ),

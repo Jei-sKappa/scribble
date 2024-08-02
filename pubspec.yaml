@@ -17,6 +17,8 @@ dependencies:
   perfect_freehand:
     path: ../perfect-freehand-dart
   simpli: ^0.1.1
+  touchable:
+    path: ../touchable
   value_notifier_tools: ^0.1.2
 
 dev_dependencies:

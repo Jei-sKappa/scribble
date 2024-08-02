@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:scribble/src/domain/model/sketch_drawing/sketch_drawing.dart';
 import 'package:scribble/src/view/notifier/scribble_notifier.dart';
 import 'package:scribble/src/view/painting/scribble_editing_painter.dart';
 import 'package:scribble/src/view/painting/scribble_painter.dart';
 import 'package:scribble/src/view/pan_gesture_catcher.dart';
 import 'package:scribble/src/view/state/scribble.state.dart';
+import 'package:touchable/touchable.dart';
 
 /// {@template scribble}
 /// This Widget represents a canvas on which users can draw with any pointer.
@@ -26,6 +28,7 @@ class Scribble extends StatelessWidget {
     /// Whether to draw the pointer when in erasing mode
     this.drawEraser = true,
     this.simulatePressure = true,
+    this.onTap,
     super.key,
   });
 
@@ -46,6 +49,11 @@ class Scribble extends StatelessWidget {
   /// {@endtemplate}
   final bool simulatePressure;
 
+  /// {@template scribble.on_tap}
+  /// The callback to call when a tap up gesture is detected on a drawing.
+  /// {@endtemplate}
+  final void Function(TapUpDetails details, SketchDrawing drawing)? onTap;
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ScribbleState>(
@@ -63,12 +71,23 @@ class Scribble extends StatelessWidget {
             ),
             child: RepaintBoundary(
               key: notifier.repaintBoundaryKey,
-              child: CustomPaint(
-                painter: ScribblePainter(
-                  sketch: state.sketch,
-                  scaleFactor: state.scaleFactor,
-                  simulatePressure: simulatePressure,
-                ),
+              child: CanvasTouchDetector(
+                // TODO(Jei-sKappa): Create a `supportedGestures` in a common place to use also in ScribbleSketch class
+                gesturesToOverride: const [
+                  GestureType.onTapUp,
+                  GestureType.onPanUpdate,
+                ],
+                builder: (context) {
+                  return CustomPaint(
+                    painter: ScribblePainter(
+                      canvasTouchDetectorContext: context,
+                      sketch: state.sketch,
+                      scaleFactor: state.scaleFactor,
+                      simulatePressure: simulatePressure,
+                      onTap: onTap,
+                    ),
+                  );
+                },
               ),
             ),
           ),
