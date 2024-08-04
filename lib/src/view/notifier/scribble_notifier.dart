@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:scribble/scribble.dart';
 import 'package:scribble/src/view/painting/line_sketch_draw_polygon_extension.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
-import 'package:scribble/src/view/painting/shape_sketch_draw_polygon_extension.dart';
+import 'package:scribble/src/view/painting/polygon_sketch_draw_polygon_extension.dart';
 import 'package:scribble/src/view/simplification/sketch_simplifier.dart';
 import 'package:value_notifier_tools/value_notifier_tools.dart';
 
@@ -224,7 +224,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
       activePointerIds: value.activePointerIds,
       selectedTool: value.selectedTool,
       drawMode: value.drawMode,
-      selectedShape: value.selectedShape,
+      selectedPolygon: value.selectedPolygon,
     );
   }
 
@@ -257,7 +257,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
         allowedPointersMode: s.allowedPointersMode,
         selectedTool: s.selectedTool,
         drawMode: value.drawMode,
-        selectedShape: value.selectedShape,
+        selectedPolygon: value.selectedPolygon,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
@@ -268,7 +268,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
         activePointerIds: value.activePointerIds,
         selectedTool: s.selectedTool,
         drawMode: value.drawMode,
-        selectedShape: value.selectedShape,
+        selectedPolygon: value.selectedPolygon,
       ),
     );
   }
@@ -283,7 +283,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
         allowedPointersMode: s.allowedPointersMode,
         selectedTool: tool,
         drawMode: value.drawMode,
-        selectedShape: value.selectedShape,
+        selectedPolygon: value.selectedPolygon,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
@@ -294,13 +294,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
         activePointerIds: value.activePointerIds,
         selectedTool: tool,
         drawMode: value.drawMode,
-        selectedShape: value.selectedShape,
+        selectedPolygon: value.selectedPolygon,
       ),
     );
   }
 
-  /// Sets the shape to the given shape.
-  void setShape(ShapeTemplate shape) {
+  /// Sets the polygon to the given polygon.
+  void setPolygon(PolygonTemplate polygon) {
     temporaryValue = value.map(
       drawing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
@@ -308,8 +308,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
         selectedWidth: s.selectedWidth,
         allowedPointersMode: s.allowedPointersMode,
         selectedTool: value.selectedTool,
-        drawMode: DrawMode.shape,
-        selectedShape: shape,
+        drawMode: DrawMode.polygon,
+        selectedPolygon: polygon,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
@@ -319,8 +319,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
         scaleFactor: value.scaleFactor,
         activePointerIds: value.activePointerIds,
         selectedTool: value.selectedTool,
-        drawMode: DrawMode.shape,
-        selectedShape: shape,
+        drawMode: DrawMode.polygon,
+        selectedPolygon: polygon,
       ),
     );
   }
@@ -335,7 +335,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
         allowedPointersMode: s.allowedPointersMode,
         selectedTool: value.selectedTool,
         drawMode: mode,
-        selectedShape: value.selectedShape,
+        selectedPolygon: value.selectedPolygon,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
@@ -346,7 +346,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
         activePointerIds: value.activePointerIds,
         selectedTool: value.selectedTool,
         drawMode: mode,
-        selectedShape: value.selectedShape,
+        selectedPolygon: value.selectedPolygon,
       ),
     );
   }
@@ -418,7 +418,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
             }
           case final LineSketchDrawing _:
             temporaryValue = _finishLineForState(s);
-          case final ShapeSketchDrawing _:
+          case final PolygonSketchDrawing _:
             temporaryValue = _finishLineForState(s);
         }
       }
@@ -448,13 +448,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
               tool: s.selectedTool,
             ),
           );
-        case DrawMode.shape:
+        case DrawMode.polygon:
           s = s.copyWith(
-            activeDrawing: ShapeSketchDrawing(
+            activeDrawing: PolygonSketchDrawing(
               id: id,
               anchorPoint: _getPointFromEvent(event),
               endPoint: _getPointFromEvent(event),
-              shapeTemplate: s.selectedShape ?? squareShape,
+              polygonTemplate: s.selectedPolygon ?? squarePolygon,
               isFilled: false,
               color: s.selectedColor,
               width: s.selectedWidth / s.scaleFactor,
@@ -581,16 +581,16 @@ class ScribbleNotifier extends ScribbleNotifierBase
             endPoint: _getPointFromEvent(event),
           ),
         );
-      case final ShapeSketchDrawing shapeSketchDrawing:
+      case final PolygonSketchDrawing polygonSketchDrawing:
         if (!_isDistanceEnough(
-          shapeSketchDrawing.anchorPoint.asOffset,
+          polygonSketchDrawing.anchorPoint.asOffset,
           event.localPosition,
         )) {
           return s;
         }
 
         return s.copyWith(
-          activeDrawing: shapeSketchDrawing.copyWith(
+          activeDrawing: polygonSketchDrawing.copyWith(
             endPoint: _getPointFromEvent(event),
           ),
         );
@@ -627,10 +627,10 @@ class ScribbleNotifier extends ScribbleNotifierBase
               _getPointFromEvent(event),
               verticelPoints,
             );
-          case final ShapeSketchDrawing shapeSketchDrawing:
+          case final PolygonSketchDrawing polygonSketchDrawing:
             return !Poly.isPointInPolygon(
               _getPointFromEvent(event),
-              shapeSketchDrawing.calculateScaledVertices(),
+              polygonSketchDrawing.calculateScaledVertices(),
             );
         }
       }).toList(),
@@ -756,7 +756,7 @@ class Poly {
 //   isOutside,
 // }
 
-// PointInPolygonResult pointInPolygon(Point p, ShapeTemplate shape) {
+// PointInPolygonResult pointInPolygon(Point p, PolygonTemplate polygon) {
 //   var i = 0;
 //   var ii = 0;
 //   var k = 0;

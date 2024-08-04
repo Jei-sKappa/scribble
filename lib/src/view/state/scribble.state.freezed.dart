@@ -69,8 +69,8 @@ mixin _$ScribbleState {
   /// The currently selected tool
   Tool get selectedTool => throw _privateConstructorUsedError;
 
-  /// The currently selected shape
-  ShapeTemplate? get selectedShape => throw _privateConstructorUsedError;
+  /// The currently selected polygon
+  PolygonTemplate? get selectedPolygon => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -85,7 +85,7 @@ mixin _$ScribbleState {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)
+            PolygonTemplate? selectedPolygon)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -97,7 +97,7 @@ mixin _$ScribbleState {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)
+            PolygonTemplate? selectedPolygon)
         erasing,
   }) =>
       throw _privateConstructorUsedError;
@@ -115,7 +115,7 @@ mixin _$ScribbleState {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -127,7 +127,7 @@ mixin _$ScribbleState {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         erasing,
   }) =>
       throw _privateConstructorUsedError;
@@ -145,7 +145,7 @@ mixin _$ScribbleState {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -157,7 +157,7 @@ mixin _$ScribbleState {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         erasing,
     required TResult orElse(),
   }) =>
@@ -203,11 +203,11 @@ abstract class $ScribbleStateCopyWith<$Res> {
       double scaleFactor,
       double simplificationTolerance,
       Tool selectedTool,
-      ShapeTemplate? selectedShape});
+      PolygonTemplate? selectedPolygon});
 
   $SketchCopyWith<$Res> get sketch;
   $PointCopyWith<$Res>? get pointerPosition;
-  $ShapeTemplateCopyWith<$Res>? get selectedShape;
+  $PolygonTemplateCopyWith<$Res>? get selectedPolygon;
 }
 
 /// @nodoc
@@ -232,7 +232,7 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
     Object? selectedTool = null,
-    Object? selectedShape = freezed,
+    Object? selectedPolygon = freezed,
   }) {
     return _then(_value.copyWith(
       sketch: null == sketch
@@ -271,10 +271,10 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
           ? _value.selectedTool
           : selectedTool // ignore: cast_nullable_to_non_nullable
               as Tool,
-      selectedShape: freezed == selectedShape
-          ? _value.selectedShape
-          : selectedShape // ignore: cast_nullable_to_non_nullable
-              as ShapeTemplate?,
+      selectedPolygon: freezed == selectedPolygon
+          ? _value.selectedPolygon
+          : selectedPolygon // ignore: cast_nullable_to_non_nullable
+              as PolygonTemplate?,
     ) as $Val);
   }
 
@@ -300,13 +300,13 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
 
   @override
   @pragma('vm:prefer-inline')
-  $ShapeTemplateCopyWith<$Res>? get selectedShape {
-    if (_value.selectedShape == null) {
+  $PolygonTemplateCopyWith<$Res>? get selectedPolygon {
+    if (_value.selectedPolygon == null) {
       return null;
     }
 
-    return $ShapeTemplateCopyWith<$Res>(_value.selectedShape!, (value) {
-      return _then(_value.copyWith(selectedShape: value) as $Val);
+    return $PolygonTemplateCopyWith<$Res>(_value.selectedPolygon!, (value) {
+      return _then(_value.copyWith(selectedPolygon: value) as $Val);
     });
   }
 }
@@ -331,7 +331,7 @@ abstract class _$$DrawingImplCopyWith<$Res>
       double scaleFactor,
       double simplificationTolerance,
       Tool selectedTool,
-      ShapeTemplate? selectedShape});
+      PolygonTemplate? selectedPolygon});
 
   @override
   $SketchCopyWith<$Res> get sketch;
@@ -339,7 +339,7 @@ abstract class _$$DrawingImplCopyWith<$Res>
   @override
   $PointCopyWith<$Res>? get pointerPosition;
   @override
-  $ShapeTemplateCopyWith<$Res>? get selectedShape;
+  $PolygonTemplateCopyWith<$Res>? get selectedPolygon;
 }
 
 /// @nodoc
@@ -364,7 +364,7 @@ class __$$DrawingImplCopyWithImpl<$Res>
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
     Object? selectedTool = null,
-    Object? selectedShape = freezed,
+    Object? selectedPolygon = freezed,
   }) {
     return _then(_$DrawingImpl(
       sketch: null == sketch
@@ -411,10 +411,10 @@ class __$$DrawingImplCopyWithImpl<$Res>
           ? _value.selectedTool
           : selectedTool // ignore: cast_nullable_to_non_nullable
               as Tool,
-      selectedShape: freezed == selectedShape
-          ? _value.selectedShape
-          : selectedShape // ignore: cast_nullable_to_non_nullable
-              as ShapeTemplate?,
+      selectedPolygon: freezed == selectedPolygon
+          ? _value.selectedPolygon
+          : selectedPolygon // ignore: cast_nullable_to_non_nullable
+              as PolygonTemplate?,
     ));
   }
 
@@ -446,7 +446,7 @@ class _$DrawingImpl extends Drawing {
       this.scaleFactor = 1,
       this.simplificationTolerance = 0,
       this.selectedTool = Tool.pen,
-      this.selectedShape,
+      this.selectedPolygon,
       final String? $type})
       : _activePointerIds = activePointerIds,
         $type = $type ?? 'drawing',
@@ -528,16 +528,16 @@ class _$DrawingImpl extends Drawing {
   @JsonKey()
   final Tool selectedTool;
 
-  /// The currently selected shape
+  /// The currently selected polygon
   @override
-  final ShapeTemplate? selectedShape;
+  final PolygonTemplate? selectedPolygon;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'ScribbleState.drawing(sketch: $sketch, drawMode: $drawMode, activeDrawing: $activeDrawing, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool, selectedShape: $selectedShape)';
+    return 'ScribbleState.drawing(sketch: $sketch, drawMode: $drawMode, activeDrawing: $activeDrawing, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool, selectedPolygon: $selectedPolygon)';
   }
 
   @override
@@ -567,8 +567,8 @@ class _$DrawingImpl extends Drawing {
                 other.simplificationTolerance == simplificationTolerance) &&
             (identical(other.selectedTool, selectedTool) ||
                 other.selectedTool == selectedTool) &&
-            (identical(other.selectedShape, selectedShape) ||
-                other.selectedShape == selectedShape));
+            (identical(other.selectedPolygon, selectedPolygon) ||
+                other.selectedPolygon == selectedPolygon));
   }
 
   @JsonKey(ignore: true)
@@ -586,7 +586,7 @@ class _$DrawingImpl extends Drawing {
       scaleFactor,
       simplificationTolerance,
       selectedTool,
-      selectedShape);
+      selectedPolygon);
 
   @JsonKey(ignore: true)
   @override
@@ -609,7 +609,7 @@ class _$DrawingImpl extends Drawing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)
+            PolygonTemplate? selectedPolygon)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -621,7 +621,7 @@ class _$DrawingImpl extends Drawing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)
+            PolygonTemplate? selectedPolygon)
         erasing,
   }) {
     return drawing(
@@ -636,7 +636,7 @@ class _$DrawingImpl extends Drawing {
         scaleFactor,
         simplificationTolerance,
         selectedTool,
-        selectedShape);
+        selectedPolygon);
   }
 
   @override
@@ -654,7 +654,7 @@ class _$DrawingImpl extends Drawing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -666,7 +666,7 @@ class _$DrawingImpl extends Drawing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         erasing,
   }) {
     return drawing?.call(
@@ -681,7 +681,7 @@ class _$DrawingImpl extends Drawing {
         scaleFactor,
         simplificationTolerance,
         selectedTool,
-        selectedShape);
+        selectedPolygon);
   }
 
   @override
@@ -699,7 +699,7 @@ class _$DrawingImpl extends Drawing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -711,7 +711,7 @@ class _$DrawingImpl extends Drawing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         erasing,
     required TResult orElse(),
   }) {
@@ -728,7 +728,7 @@ class _$DrawingImpl extends Drawing {
           scaleFactor,
           simplificationTolerance,
           selectedTool,
-          selectedShape);
+          selectedPolygon);
     }
     return orElse();
   }
@@ -785,7 +785,7 @@ abstract class Drawing extends ScribbleState {
       final double scaleFactor,
       final double simplificationTolerance,
       final Tool selectedTool,
-      final ShapeTemplate? selectedShape}) = _$DrawingImpl;
+      final PolygonTemplate? selectedPolygon}) = _$DrawingImpl;
   const Drawing._() : super._();
 
   factory Drawing.fromJson(Map<String, dynamic> json) = _$DrawingImpl.fromJson;
@@ -846,8 +846,8 @@ abstract class Drawing extends ScribbleState {
   Tool get selectedTool;
   @override
 
-  /// The currently selected shape
-  ShapeTemplate? get selectedShape;
+  /// The currently selected polygon
+  PolygonTemplate? get selectedPolygon;
   @override
   @JsonKey(ignore: true)
   _$$DrawingImplCopyWith<_$DrawingImpl> get copyWith =>
@@ -872,14 +872,14 @@ abstract class _$$ErasingImplCopyWith<$Res>
       double scaleFactor,
       double simplificationTolerance,
       Tool selectedTool,
-      ShapeTemplate? selectedShape});
+      PolygonTemplate? selectedPolygon});
 
   @override
   $SketchCopyWith<$Res> get sketch;
   @override
   $PointCopyWith<$Res>? get pointerPosition;
   @override
-  $ShapeTemplateCopyWith<$Res>? get selectedShape;
+  $PolygonTemplateCopyWith<$Res>? get selectedPolygon;
 }
 
 /// @nodoc
@@ -902,7 +902,7 @@ class __$$ErasingImplCopyWithImpl<$Res>
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
     Object? selectedTool = null,
-    Object? selectedShape = freezed,
+    Object? selectedPolygon = freezed,
   }) {
     return _then(_$ErasingImpl(
       sketch: null == sketch
@@ -941,10 +941,10 @@ class __$$ErasingImplCopyWithImpl<$Res>
           ? _value.selectedTool
           : selectedTool // ignore: cast_nullable_to_non_nullable
               as Tool,
-      selectedShape: freezed == selectedShape
-          ? _value.selectedShape
-          : selectedShape // ignore: cast_nullable_to_non_nullable
-              as ShapeTemplate?,
+      selectedPolygon: freezed == selectedPolygon
+          ? _value.selectedPolygon
+          : selectedPolygon // ignore: cast_nullable_to_non_nullable
+              as PolygonTemplate?,
     ));
   }
 }
@@ -962,7 +962,7 @@ class _$ErasingImpl extends Erasing {
       this.scaleFactor = 1,
       this.simplificationTolerance = 0,
       this.selectedTool = Tool.pen,
-      this.selectedShape,
+      this.selectedPolygon,
       final String? $type})
       : _activePointerIds = activePointerIds,
         $type = $type ?? 'erasing',
@@ -1031,16 +1031,16 @@ class _$ErasingImpl extends Erasing {
   @JsonKey()
   final Tool selectedTool;
 
-  /// The currently selected shape
+  /// The currently selected polygon
   @override
-  final ShapeTemplate? selectedShape;
+  final PolygonTemplate? selectedPolygon;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'ScribbleState.erasing(sketch: $sketch, drawMode: $drawMode, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool, selectedShape: $selectedShape)';
+    return 'ScribbleState.erasing(sketch: $sketch, drawMode: $drawMode, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, selectedTool: $selectedTool, selectedPolygon: $selectedPolygon)';
   }
 
   @override
@@ -1066,8 +1066,8 @@ class _$ErasingImpl extends Erasing {
                 other.simplificationTolerance == simplificationTolerance) &&
             (identical(other.selectedTool, selectedTool) ||
                 other.selectedTool == selectedTool) &&
-            (identical(other.selectedShape, selectedShape) ||
-                other.selectedShape == selectedShape));
+            (identical(other.selectedPolygon, selectedPolygon) ||
+                other.selectedPolygon == selectedPolygon));
   }
 
   @JsonKey(ignore: true)
@@ -1083,7 +1083,7 @@ class _$ErasingImpl extends Erasing {
       scaleFactor,
       simplificationTolerance,
       selectedTool,
-      selectedShape);
+      selectedPolygon);
 
   @JsonKey(ignore: true)
   @override
@@ -1106,7 +1106,7 @@ class _$ErasingImpl extends Erasing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)
+            PolygonTemplate? selectedPolygon)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -1118,7 +1118,7 @@ class _$ErasingImpl extends Erasing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)
+            PolygonTemplate? selectedPolygon)
         erasing,
   }) {
     return erasing(
@@ -1131,7 +1131,7 @@ class _$ErasingImpl extends Erasing {
         scaleFactor,
         simplificationTolerance,
         selectedTool,
-        selectedShape);
+        selectedPolygon);
   }
 
   @override
@@ -1149,7 +1149,7 @@ class _$ErasingImpl extends Erasing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -1161,7 +1161,7 @@ class _$ErasingImpl extends Erasing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         erasing,
   }) {
     return erasing?.call(
@@ -1174,7 +1174,7 @@ class _$ErasingImpl extends Erasing {
         scaleFactor,
         simplificationTolerance,
         selectedTool,
-        selectedShape);
+        selectedPolygon);
   }
 
   @override
@@ -1192,7 +1192,7 @@ class _$ErasingImpl extends Erasing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -1204,7 +1204,7 @@ class _$ErasingImpl extends Erasing {
             double scaleFactor,
             double simplificationTolerance,
             Tool selectedTool,
-            ShapeTemplate? selectedShape)?
+            PolygonTemplate? selectedPolygon)?
         erasing,
     required TResult orElse(),
   }) {
@@ -1219,7 +1219,7 @@ class _$ErasingImpl extends Erasing {
           scaleFactor,
           simplificationTolerance,
           selectedTool,
-          selectedShape);
+          selectedPolygon);
     }
     return orElse();
   }
@@ -1274,7 +1274,7 @@ abstract class Erasing extends ScribbleState {
       final double scaleFactor,
       final double simplificationTolerance,
       final Tool selectedTool,
-      final ShapeTemplate? selectedShape}) = _$ErasingImpl;
+      final PolygonTemplate? selectedPolygon}) = _$ErasingImpl;
   const Erasing._() : super._();
 
   factory Erasing.fromJson(Map<String, dynamic> json) = _$ErasingImpl.fromJson;
@@ -1325,8 +1325,8 @@ abstract class Erasing extends ScribbleState {
   Tool get selectedTool;
   @override
 
-  /// The currently selected shape
-  ShapeTemplate? get selectedShape;
+  /// The currently selected polygon
+  PolygonTemplate? get selectedPolygon;
   @override
   @JsonKey(ignore: true)
   _$$ErasingImplCopyWith<_$ErasingImpl> get copyWith =>

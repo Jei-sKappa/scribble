@@ -60,14 +60,14 @@ Map<String, dynamic> _$$LineSketchDrawingImplToJson(
       'runtimeType': instance.$type,
     };
 
-_$ShapeSketchDrawingImpl _$$ShapeSketchDrawingImplFromJson(
+_$PolygonSketchDrawingImpl _$$PolygonSketchDrawingImplFromJson(
         Map<String, dynamic> json) =>
-    _$ShapeSketchDrawingImpl(
+    _$PolygonSketchDrawingImpl(
       id: json['id'] as Object,
       anchorPoint: Point.fromJson(json['anchorPoint'] as Map<String, dynamic>),
       endPoint: Point.fromJson(json['endPoint'] as Map<String, dynamic>),
-      shapeTemplate:
-          ShapeTemplate.fromJson(json['shapeTemplate'] as Map<String, dynamic>),
+      polygonTemplate: PolygonTemplate.fromJson(
+          json['polygonTemplate'] as Map<String, dynamic>),
       isFilled: json['isFilled'] as bool,
       color: (json['color'] as num).toInt(),
       width: (json['width'] as num).toDouble(),
@@ -75,13 +75,13 @@ _$ShapeSketchDrawingImpl _$$ShapeSketchDrawingImplFromJson(
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$ShapeSketchDrawingImplToJson(
-        _$ShapeSketchDrawingImpl instance) =>
+Map<String, dynamic> _$$PolygonSketchDrawingImplToJson(
+        _$PolygonSketchDrawingImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'anchorPoint': instance.anchorPoint.toJson(),
       'endPoint': instance.endPoint.toJson(),
-      'shapeTemplate': instance.shapeTemplate.toJson(),
+      'polygonTemplate': instance.polygonTemplate.toJson(),
       'isFilled': instance.isFilled,
       'color': instance.color,
       'width': instance.width,

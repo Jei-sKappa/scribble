@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'shape_template_details.dart';
+part of 'polygon_template_details.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,33 +14,34 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ShapeTemplateDetails _$ShapeTemplateDetailsFromJson(Map<String, dynamic> json) {
-  return _ShapeTemplateDetails.fromJson(json);
+PolygonTemplateDetails _$PolygonTemplateDetailsFromJson(
+    Map<String, dynamic> json) {
+  return _PolygonTemplateDetails.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ShapeTemplateDetails {
-  /// The size of the shape.
+mixin _$PolygonTemplateDetails {
+  /// The size of the polygon.
   @JsonKey(fromJson: sizeFromJson, toJson: sizeToJson)
   Size get size => throw _privateConstructorUsedError;
 
-  /// The minimum x value of the shape.
+  /// The minimum x value of the polygon.
   double get minX => throw _privateConstructorUsedError;
 
-  /// The minimum y value of the shape.
+  /// The minimum y value of the polygon.
   double get minY => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ShapeTemplateDetailsCopyWith<ShapeTemplateDetails> get copyWith =>
+  $PolygonTemplateDetailsCopyWith<PolygonTemplateDetails> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ShapeTemplateDetailsCopyWith<$Res> {
-  factory $ShapeTemplateDetailsCopyWith(ShapeTemplateDetails value,
-          $Res Function(ShapeTemplateDetails) then) =
-      _$ShapeTemplateDetailsCopyWithImpl<$Res, ShapeTemplateDetails>;
+abstract class $PolygonTemplateDetailsCopyWith<$Res> {
+  factory $PolygonTemplateDetailsCopyWith(PolygonTemplateDetails value,
+          $Res Function(PolygonTemplateDetails) then) =
+      _$PolygonTemplateDetailsCopyWithImpl<$Res, PolygonTemplateDetails>;
   @useResult
   $Res call(
       {@JsonKey(fromJson: sizeFromJson, toJson: sizeToJson) Size size,
@@ -49,10 +50,10 @@ abstract class $ShapeTemplateDetailsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ShapeTemplateDetailsCopyWithImpl<$Res,
-        $Val extends ShapeTemplateDetails>
-    implements $ShapeTemplateDetailsCopyWith<$Res> {
-  _$ShapeTemplateDetailsCopyWithImpl(this._value, this._then);
+class _$PolygonTemplateDetailsCopyWithImpl<$Res,
+        $Val extends PolygonTemplateDetails>
+    implements $PolygonTemplateDetailsCopyWith<$Res> {
+  _$PolygonTemplateDetailsCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -84,11 +85,12 @@ class _$ShapeTemplateDetailsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$ShapeTemplateDetailsImplCopyWith<$Res>
-    implements $ShapeTemplateDetailsCopyWith<$Res> {
-  factory _$$ShapeTemplateDetailsImplCopyWith(_$ShapeTemplateDetailsImpl value,
-          $Res Function(_$ShapeTemplateDetailsImpl) then) =
-      __$$ShapeTemplateDetailsImplCopyWithImpl<$Res>;
+abstract class _$$PolygonTemplateDetailsImplCopyWith<$Res>
+    implements $PolygonTemplateDetailsCopyWith<$Res> {
+  factory _$$PolygonTemplateDetailsImplCopyWith(
+          _$PolygonTemplateDetailsImpl value,
+          $Res Function(_$PolygonTemplateDetailsImpl) then) =
+      __$$PolygonTemplateDetailsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -98,11 +100,13 @@ abstract class _$$ShapeTemplateDetailsImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ShapeTemplateDetailsImplCopyWithImpl<$Res>
-    extends _$ShapeTemplateDetailsCopyWithImpl<$Res, _$ShapeTemplateDetailsImpl>
-    implements _$$ShapeTemplateDetailsImplCopyWith<$Res> {
-  __$$ShapeTemplateDetailsImplCopyWithImpl(_$ShapeTemplateDetailsImpl _value,
-      $Res Function(_$ShapeTemplateDetailsImpl) _then)
+class __$$PolygonTemplateDetailsImplCopyWithImpl<$Res>
+    extends _$PolygonTemplateDetailsCopyWithImpl<$Res,
+        _$PolygonTemplateDetailsImpl>
+    implements _$$PolygonTemplateDetailsImplCopyWith<$Res> {
+  __$$PolygonTemplateDetailsImplCopyWithImpl(
+      _$PolygonTemplateDetailsImpl _value,
+      $Res Function(_$PolygonTemplateDetailsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -112,7 +116,7 @@ class __$$ShapeTemplateDetailsImplCopyWithImpl<$Res>
     Object? minX = null,
     Object? minY = null,
   }) {
-    return _then(_$ShapeTemplateDetailsImpl(
+    return _then(_$PolygonTemplateDetailsImpl(
       size: null == size
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
@@ -131,38 +135,38 @@ class __$$ShapeTemplateDetailsImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ShapeTemplateDetailsImpl implements _ShapeTemplateDetails {
-  const _$ShapeTemplateDetailsImpl(
+class _$PolygonTemplateDetailsImpl implements _PolygonTemplateDetails {
+  const _$PolygonTemplateDetailsImpl(
       {@JsonKey(fromJson: sizeFromJson, toJson: sizeToJson) required this.size,
       required this.minX,
       required this.minY});
 
-  factory _$ShapeTemplateDetailsImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ShapeTemplateDetailsImplFromJson(json);
+  factory _$PolygonTemplateDetailsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PolygonTemplateDetailsImplFromJson(json);
 
-  /// The size of the shape.
+  /// The size of the polygon.
   @override
   @JsonKey(fromJson: sizeFromJson, toJson: sizeToJson)
   final Size size;
 
-  /// The minimum x value of the shape.
+  /// The minimum x value of the polygon.
   @override
   final double minX;
 
-  /// The minimum y value of the shape.
+  /// The minimum y value of the polygon.
   @override
   final double minY;
 
   @override
   String toString() {
-    return 'ShapeTemplateDetails(size: $size, minX: $minX, minY: $minY)';
+    return 'PolygonTemplateDetails(size: $size, minX: $minX, minY: $minY)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ShapeTemplateDetailsImpl &&
+            other is _$PolygonTemplateDetailsImpl &&
             (identical(other.size, size) || other.size == size) &&
             (identical(other.minX, minX) || other.minX == minX) &&
             (identical(other.minY, minY) || other.minY == minY));
@@ -175,44 +179,43 @@ class _$ShapeTemplateDetailsImpl implements _ShapeTemplateDetails {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ShapeTemplateDetailsImplCopyWith<_$ShapeTemplateDetailsImpl>
-      get copyWith =>
-          __$$ShapeTemplateDetailsImplCopyWithImpl<_$ShapeTemplateDetailsImpl>(
-              this, _$identity);
+  _$$PolygonTemplateDetailsImplCopyWith<_$PolygonTemplateDetailsImpl>
+      get copyWith => __$$PolygonTemplateDetailsImplCopyWithImpl<
+          _$PolygonTemplateDetailsImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ShapeTemplateDetailsImplToJson(
+    return _$$PolygonTemplateDetailsImplToJson(
       this,
     );
   }
 }
 
-abstract class _ShapeTemplateDetails implements ShapeTemplateDetails {
-  const factory _ShapeTemplateDetails(
+abstract class _PolygonTemplateDetails implements PolygonTemplateDetails {
+  const factory _PolygonTemplateDetails(
       {@JsonKey(fromJson: sizeFromJson, toJson: sizeToJson)
       required final Size size,
       required final double minX,
-      required final double minY}) = _$ShapeTemplateDetailsImpl;
+      required final double minY}) = _$PolygonTemplateDetailsImpl;
 
-  factory _ShapeTemplateDetails.fromJson(Map<String, dynamic> json) =
-      _$ShapeTemplateDetailsImpl.fromJson;
+  factory _PolygonTemplateDetails.fromJson(Map<String, dynamic> json) =
+      _$PolygonTemplateDetailsImpl.fromJson;
 
   @override
 
-  /// The size of the shape.
+  /// The size of the polygon.
   @JsonKey(fromJson: sizeFromJson, toJson: sizeToJson)
   Size get size;
   @override
 
-  /// The minimum x value of the shape.
+  /// The minimum x value of the polygon.
   double get minX;
   @override
 
-  /// The minimum y value of the shape.
+  /// The minimum y value of the polygon.
   double get minY;
   @override
   @JsonKey(ignore: true)
-  _$$ShapeTemplateDetailsImplCopyWith<_$ShapeTemplateDetailsImpl>
+  _$$PolygonTemplateDetailsImplCopyWith<_$PolygonTemplateDetailsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

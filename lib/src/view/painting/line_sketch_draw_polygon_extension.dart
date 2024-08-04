@@ -22,7 +22,7 @@ extension LineSketchDrawPolygon on LineSketchDrawing {
     final offsetX = -dy * halfWidth / length;
     final offsetY = dx * halfWidth / length;
 
-    // Calculate the four points of the filled shape
+    // Calculate the four points of the filled polygon
     final p1 = Offset(
       line.anchorPoint.x + offsetX,
       line.anchorPoint.y + offsetY,

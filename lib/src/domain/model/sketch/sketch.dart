@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scribble/src/domain/model/sketch_drawing/sketch_drawing.dart';
 
 export '../point/point.dart';
-export '../shape_template/shape_template.dart';
+export '../polygon_template/polygon_template.dart';
 export '../sketch_drawing/sketch_drawing.dart';
 export '../tool/tool.dart';
 

@@ -20,8 +20,8 @@ SketchDrawing _$SketchDrawingFromJson(Map<String, dynamic> json) {
       return FreeSketchDrawing.fromJson(json);
     case 'line':
       return LineSketchDrawing.fromJson(json);
-    case 'shape':
-      return ShapeSketchDrawing.fromJson(json);
+    case 'polygon':
+      return PolygonSketchDrawing.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'SketchDrawing',
@@ -31,6 +31,7 @@ SketchDrawing _$SketchDrawingFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SketchDrawing {
+// TODO(Jei-sKappa): The id should not be required and should be nullable. If null generate a new id here.
   /// The id of the drawing
   Object get id => throw _privateConstructorUsedError;
 
@@ -54,12 +55,12 @@ mixin _$SketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)
-        shape,
+        polygon,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -74,12 +75,12 @@ mixin _$SketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)?
-        shape,
+        polygon,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -94,12 +95,12 @@ mixin _$SketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)?
-        shape,
+        polygon,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -107,21 +108,21 @@ mixin _$SketchDrawing {
   TResult map<TResult extends Object?>({
     required TResult Function(FreeSketchDrawing value) free,
     required TResult Function(LineSketchDrawing value) line,
-    required TResult Function(ShapeSketchDrawing value) shape,
+    required TResult Function(PolygonSketchDrawing value) polygon,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FreeSketchDrawing value)? free,
     TResult? Function(LineSketchDrawing value)? line,
-    TResult? Function(ShapeSketchDrawing value)? shape,
+    TResult? Function(PolygonSketchDrawing value)? polygon,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FreeSketchDrawing value)? free,
     TResult Function(LineSketchDrawing value)? line,
-    TResult Function(ShapeSketchDrawing value)? shape,
+    TResult Function(PolygonSketchDrawing value)? polygon,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -244,6 +245,7 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
   factory _$FreeSketchDrawingImpl.fromJson(Map<String, dynamic> json) =>
       _$$FreeSketchDrawingImplFromJson(json);
 
+// TODO(Jei-sKappa): The id should not be required and should be nullable. If null generate a new id here.
   /// The id of the drawing
   @override
   final Object id;
@@ -322,12 +324,12 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)
-        shape,
+        polygon,
   }) {
     return free(id, points, color, width, tool);
   }
@@ -345,12 +347,12 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)?
-        shape,
+        polygon,
   }) {
     return free?.call(id, points, color, width, tool);
   }
@@ -368,12 +370,12 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)?
-        shape,
+        polygon,
     required TResult orElse(),
   }) {
     if (free != null) {
@@ -387,7 +389,7 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
   TResult map<TResult extends Object?>({
     required TResult Function(FreeSketchDrawing value) free,
     required TResult Function(LineSketchDrawing value) line,
-    required TResult Function(ShapeSketchDrawing value) shape,
+    required TResult Function(PolygonSketchDrawing value) polygon,
   }) {
     return free(this);
   }
@@ -397,7 +399,7 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FreeSketchDrawing value)? free,
     TResult? Function(LineSketchDrawing value)? line,
-    TResult? Function(ShapeSketchDrawing value)? shape,
+    TResult? Function(PolygonSketchDrawing value)? polygon,
   }) {
     return free?.call(this);
   }
@@ -407,7 +409,7 @@ class _$FreeSketchDrawingImpl extends FreeSketchDrawing {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FreeSketchDrawing value)? free,
     TResult Function(LineSketchDrawing value)? line,
-    TResult Function(ShapeSketchDrawing value)? shape,
+    TResult Function(PolygonSketchDrawing value)? polygon,
     required TResult orElse(),
   }) {
     if (free != null) {
@@ -436,8 +438,7 @@ abstract class FreeSketchDrawing extends SketchDrawing {
   factory FreeSketchDrawing.fromJson(Map<String, dynamic> json) =
       _$FreeSketchDrawingImpl.fromJson;
 
-  @override
-
+  @override // TODO(Jei-sKappa): The id should not be required and should be nullable. If null generate a new id here.
   /// The id of the drawing
   Object get id;
 
@@ -637,12 +638,12 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)
-        shape,
+        polygon,
   }) {
     return line(id, anchorPoint, endPoint, color, width, tool);
   }
@@ -660,12 +661,12 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)?
-        shape,
+        polygon,
   }) {
     return line?.call(id, anchorPoint, endPoint, color, width, tool);
   }
@@ -683,12 +684,12 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)?
-        shape,
+        polygon,
     required TResult orElse(),
   }) {
     if (line != null) {
@@ -702,7 +703,7 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
   TResult map<TResult extends Object?>({
     required TResult Function(FreeSketchDrawing value) free,
     required TResult Function(LineSketchDrawing value) line,
-    required TResult Function(ShapeSketchDrawing value) shape,
+    required TResult Function(PolygonSketchDrawing value) polygon,
   }) {
     return line(this);
   }
@@ -712,7 +713,7 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FreeSketchDrawing value)? free,
     TResult? Function(LineSketchDrawing value)? line,
-    TResult? Function(ShapeSketchDrawing value)? shape,
+    TResult? Function(PolygonSketchDrawing value)? polygon,
   }) {
     return line?.call(this);
   }
@@ -722,7 +723,7 @@ class _$LineSketchDrawingImpl extends LineSketchDrawing {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FreeSketchDrawing value)? free,
     TResult Function(LineSketchDrawing value)? line,
-    TResult Function(ShapeSketchDrawing value)? shape,
+    TResult Function(PolygonSketchDrawing value)? polygon,
     required TResult orElse(),
   }) {
     if (line != null) {
@@ -781,18 +782,18 @@ abstract class LineSketchDrawing extends SketchDrawing {
 }
 
 /// @nodoc
-abstract class _$$ShapeSketchDrawingImplCopyWith<$Res>
+abstract class _$$PolygonSketchDrawingImplCopyWith<$Res>
     implements $SketchDrawingCopyWith<$Res> {
-  factory _$$ShapeSketchDrawingImplCopyWith(_$ShapeSketchDrawingImpl value,
-          $Res Function(_$ShapeSketchDrawingImpl) then) =
-      __$$ShapeSketchDrawingImplCopyWithImpl<$Res>;
+  factory _$$PolygonSketchDrawingImplCopyWith(_$PolygonSketchDrawingImpl value,
+          $Res Function(_$PolygonSketchDrawingImpl) then) =
+      __$$PolygonSketchDrawingImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {Object id,
       Point anchorPoint,
       Point endPoint,
-      ShapeTemplate shapeTemplate,
+      PolygonTemplate polygonTemplate,
       bool isFilled,
       int color,
       double width,
@@ -800,15 +801,15 @@ abstract class _$$ShapeSketchDrawingImplCopyWith<$Res>
 
   $PointCopyWith<$Res> get anchorPoint;
   $PointCopyWith<$Res> get endPoint;
-  $ShapeTemplateCopyWith<$Res> get shapeTemplate;
+  $PolygonTemplateCopyWith<$Res> get polygonTemplate;
 }
 
 /// @nodoc
-class __$$ShapeSketchDrawingImplCopyWithImpl<$Res>
-    extends _$SketchDrawingCopyWithImpl<$Res, _$ShapeSketchDrawingImpl>
-    implements _$$ShapeSketchDrawingImplCopyWith<$Res> {
-  __$$ShapeSketchDrawingImplCopyWithImpl(_$ShapeSketchDrawingImpl _value,
-      $Res Function(_$ShapeSketchDrawingImpl) _then)
+class __$$PolygonSketchDrawingImplCopyWithImpl<$Res>
+    extends _$SketchDrawingCopyWithImpl<$Res, _$PolygonSketchDrawingImpl>
+    implements _$$PolygonSketchDrawingImplCopyWith<$Res> {
+  __$$PolygonSketchDrawingImplCopyWithImpl(_$PolygonSketchDrawingImpl _value,
+      $Res Function(_$PolygonSketchDrawingImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -817,13 +818,13 @@ class __$$ShapeSketchDrawingImplCopyWithImpl<$Res>
     Object? id = null,
     Object? anchorPoint = null,
     Object? endPoint = null,
-    Object? shapeTemplate = null,
+    Object? polygonTemplate = null,
     Object? isFilled = null,
     Object? color = null,
     Object? width = null,
     Object? tool = null,
   }) {
-    return _then(_$ShapeSketchDrawingImpl(
+    return _then(_$PolygonSketchDrawingImpl(
       id: null == id ? _value.id : id,
       anchorPoint: null == anchorPoint
           ? _value.anchorPoint
@@ -833,10 +834,10 @@ class __$$ShapeSketchDrawingImplCopyWithImpl<$Res>
           ? _value.endPoint
           : endPoint // ignore: cast_nullable_to_non_nullable
               as Point,
-      shapeTemplate: null == shapeTemplate
-          ? _value.shapeTemplate
-          : shapeTemplate // ignore: cast_nullable_to_non_nullable
-              as ShapeTemplate,
+      polygonTemplate: null == polygonTemplate
+          ? _value.polygonTemplate
+          : polygonTemplate // ignore: cast_nullable_to_non_nullable
+              as PolygonTemplate,
       isFilled: null == isFilled
           ? _value.isFilled
           : isFilled // ignore: cast_nullable_to_non_nullable
@@ -874,49 +875,49 @@ class __$$ShapeSketchDrawingImplCopyWithImpl<$Res>
 
   @override
   @pragma('vm:prefer-inline')
-  $ShapeTemplateCopyWith<$Res> get shapeTemplate {
-    return $ShapeTemplateCopyWith<$Res>(_value.shapeTemplate, (value) {
-      return _then(_value.copyWith(shapeTemplate: value));
+  $PolygonTemplateCopyWith<$Res> get polygonTemplate {
+    return $PolygonTemplateCopyWith<$Res>(_value.polygonTemplate, (value) {
+      return _then(_value.copyWith(polygonTemplate: value));
     });
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
-  const _$ShapeSketchDrawingImpl(
+class _$PolygonSketchDrawingImpl extends PolygonSketchDrawing {
+  const _$PolygonSketchDrawingImpl(
       {required this.id,
       required this.anchorPoint,
       required this.endPoint,
-      required this.shapeTemplate,
+      required this.polygonTemplate,
       required this.isFilled,
       required this.color,
       required this.width,
       this.tool = Tool.pen,
       final String? $type})
-      : $type = $type ?? 'shape',
+      : $type = $type ?? 'polygon',
         super._();
 
-  factory _$ShapeSketchDrawingImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ShapeSketchDrawingImplFromJson(json);
+  factory _$PolygonSketchDrawingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PolygonSketchDrawingImplFromJson(json);
 
   /// The id of the drawing
   @override
   final Object id;
 
-  /// The starting point of the shape
+  /// The starting point of the polygon
   @override
   final Point anchorPoint;
 
-  /// The end point of the shape
+  /// The end point of the polygon
   @override
   final Point endPoint;
 
-  /// The shape template used to draw the shape
+  /// The polygon template used to draw the polygon
   @override
-  final ShapeTemplate shapeTemplate;
+  final PolygonTemplate polygonTemplate;
 
-  /// Whether the shape is filled or not
+  /// Whether the polygon is filled or not
   @override
   final bool isFilled;
 
@@ -938,21 +939,21 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
 
   @override
   String toString() {
-    return 'SketchDrawing.shape(id: $id, anchorPoint: $anchorPoint, endPoint: $endPoint, shapeTemplate: $shapeTemplate, isFilled: $isFilled, color: $color, width: $width, tool: $tool)';
+    return 'SketchDrawing.polygon(id: $id, anchorPoint: $anchorPoint, endPoint: $endPoint, polygonTemplate: $polygonTemplate, isFilled: $isFilled, color: $color, width: $width, tool: $tool)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ShapeSketchDrawingImpl &&
+            other is _$PolygonSketchDrawingImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.anchorPoint, anchorPoint) ||
                 other.anchorPoint == anchorPoint) &&
             (identical(other.endPoint, endPoint) ||
                 other.endPoint == endPoint) &&
-            (identical(other.shapeTemplate, shapeTemplate) ||
-                other.shapeTemplate == shapeTemplate) &&
+            (identical(other.polygonTemplate, polygonTemplate) ||
+                other.polygonTemplate == polygonTemplate) &&
             (identical(other.isFilled, isFilled) ||
                 other.isFilled == isFilled) &&
             (identical(other.color, color) || other.color == color) &&
@@ -967,7 +968,7 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
       const DeepCollectionEquality().hash(id),
       anchorPoint,
       endPoint,
-      shapeTemplate,
+      polygonTemplate,
       isFilled,
       color,
       width,
@@ -976,9 +977,10 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ShapeSketchDrawingImplCopyWith<_$ShapeSketchDrawingImpl> get copyWith =>
-      __$$ShapeSketchDrawingImplCopyWithImpl<_$ShapeSketchDrawingImpl>(
-          this, _$identity);
+  _$$PolygonSketchDrawingImplCopyWith<_$PolygonSketchDrawingImpl>
+      get copyWith =>
+          __$$PolygonSketchDrawingImplCopyWithImpl<_$PolygonSketchDrawingImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -993,15 +995,15 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)
-        shape,
+        polygon,
   }) {
-    return shape(
-        id, anchorPoint, endPoint, shapeTemplate, isFilled, color, width, tool);
+    return polygon(id, anchorPoint, endPoint, polygonTemplate, isFilled, color,
+        width, tool);
   }
 
   @override
@@ -1017,15 +1019,15 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)?
-        shape,
+        polygon,
   }) {
-    return shape?.call(
-        id, anchorPoint, endPoint, shapeTemplate, isFilled, color, width, tool);
+    return polygon?.call(id, anchorPoint, endPoint, polygonTemplate, isFilled,
+        color, width, tool);
   }
 
   @override
@@ -1041,17 +1043,17 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
             Object id,
             Point anchorPoint,
             Point endPoint,
-            ShapeTemplate shapeTemplate,
+            PolygonTemplate polygonTemplate,
             bool isFilled,
             int color,
             double width,
             Tool tool)?
-        shape,
+        polygon,
     required TResult orElse(),
   }) {
-    if (shape != null) {
-      return shape(id, anchorPoint, endPoint, shapeTemplate, isFilled, color,
-          width, tool);
+    if (polygon != null) {
+      return polygon(id, anchorPoint, endPoint, polygonTemplate, isFilled,
+          color, width, tool);
     }
     return orElse();
   }
@@ -1061,9 +1063,9 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
   TResult map<TResult extends Object?>({
     required TResult Function(FreeSketchDrawing value) free,
     required TResult Function(LineSketchDrawing value) line,
-    required TResult Function(ShapeSketchDrawing value) shape,
+    required TResult Function(PolygonSketchDrawing value) polygon,
   }) {
-    return shape(this);
+    return polygon(this);
   }
 
   @override
@@ -1071,9 +1073,9 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FreeSketchDrawing value)? free,
     TResult? Function(LineSketchDrawing value)? line,
-    TResult? Function(ShapeSketchDrawing value)? shape,
+    TResult? Function(PolygonSketchDrawing value)? polygon,
   }) {
-    return shape?.call(this);
+    return polygon?.call(this);
   }
 
   @override
@@ -1081,53 +1083,53 @@ class _$ShapeSketchDrawingImpl extends ShapeSketchDrawing {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FreeSketchDrawing value)? free,
     TResult Function(LineSketchDrawing value)? line,
-    TResult Function(ShapeSketchDrawing value)? shape,
+    TResult Function(PolygonSketchDrawing value)? polygon,
     required TResult orElse(),
   }) {
-    if (shape != null) {
-      return shape(this);
+    if (polygon != null) {
+      return polygon(this);
     }
     return orElse();
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ShapeSketchDrawingImplToJson(
+    return _$$PolygonSketchDrawingImplToJson(
       this,
     );
   }
 }
 
-abstract class ShapeSketchDrawing extends SketchDrawing {
-  const factory ShapeSketchDrawing(
+abstract class PolygonSketchDrawing extends SketchDrawing {
+  const factory PolygonSketchDrawing(
       {required final Object id,
       required final Point anchorPoint,
       required final Point endPoint,
-      required final ShapeTemplate shapeTemplate,
+      required final PolygonTemplate polygonTemplate,
       required final bool isFilled,
       required final int color,
       required final double width,
-      final Tool tool}) = _$ShapeSketchDrawingImpl;
-  const ShapeSketchDrawing._() : super._();
+      final Tool tool}) = _$PolygonSketchDrawingImpl;
+  const PolygonSketchDrawing._() : super._();
 
-  factory ShapeSketchDrawing.fromJson(Map<String, dynamic> json) =
-      _$ShapeSketchDrawingImpl.fromJson;
+  factory PolygonSketchDrawing.fromJson(Map<String, dynamic> json) =
+      _$PolygonSketchDrawingImpl.fromJson;
 
   @override
 
   /// The id of the drawing
   Object get id;
 
-  /// The starting point of the shape
+  /// The starting point of the polygon
   Point get anchorPoint;
 
-  /// The end point of the shape
+  /// The end point of the polygon
   Point get endPoint;
 
-  /// The shape template used to draw the shape
-  ShapeTemplate get shapeTemplate;
+  /// The polygon template used to draw the polygon
+  PolygonTemplate get polygonTemplate;
 
-  /// Whether the shape is filled or not
+  /// Whether the polygon is filled or not
   bool get isFilled;
   @override
 
@@ -1143,6 +1145,6 @@ abstract class ShapeSketchDrawing extends SketchDrawing {
   Tool get tool;
   @override
   @JsonKey(ignore: true)
-  _$$ShapeSketchDrawingImplCopyWith<_$ShapeSketchDrawingImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$PolygonSketchDrawingImplCopyWith<_$PolygonSketchDrawingImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

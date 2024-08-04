@@ -4,7 +4,7 @@ import 'package:perfect_freehand/perfect_freehand.dart' as pf;
 import 'package:scribble/scribble.dart';
 import 'package:scribble/src/view/painting/line_sketch_draw_polygon_extension.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
-import 'package:scribble/src/view/painting/shape_sketch_draw_polygon_extension.dart';
+import 'package:scribble/src/view/painting/polygon_sketch_draw_polygon_extension.dart';
 import 'package:scribble/src/view/painting/tool_paint_extension.dart';
 import 'package:touchable/touchable.dart';
 
@@ -91,9 +91,9 @@ void _drawSketchDrawing(
         scaleFactor: scaleFactor,
         gestureCallbacks: gestureCallbacks,
       );
-    case final ShapeSketchDrawing shape:
-      _drawShape(
-        shape,
+    case final PolygonSketchDrawing polygon:
+      _drawPolygon(
+        polygon,
         canvas: canvas,
         scaleFactor: scaleFactor,
         gestureCallbacks: gestureCallbacks,
@@ -213,34 +213,34 @@ void _drawStraightLine(
   );
 }
 
-/// {@template scribble.canvas.draw_shape}
-/// Draws a shape on the canvas based on the given [ShapeSketchDrawing]
+/// {@template scribble.canvas.draw_polygon}
+/// Draws a polygon on the canvas based on the given [PolygonSketchDrawing]
 /// {@endtemplate}
-void _drawShape(
-  ShapeSketchDrawing shape, {
+void _drawPolygon(
+  PolygonSketchDrawing polygon, {
   required Object canvas,
   required double scaleFactor,
   required GestureCallbacks? gestureCallbacks,
 }) {
-  if (shape.shapeTemplate.vertices.length < 3) {
+  if (polygon.polygonTemplate.vertices.length < 3) {
     // TODO(Jei-sKappa): Throw an error
     return;
   }
 
-  if (shape.anchorPoint == shape.endPoint) {
+  if (polygon.anchorPoint == polygon.endPoint) {
     _drawPoint(
       canvas: canvas,
-      width: shape.width,
+      width: polygon.width,
       scaleFactor: scaleFactor,
-      color: shape.color,
-      pointerPosition: shape.anchorPoint,
-      tool: shape.tool,
+      color: polygon.color,
+      pointerPosition: polygon.anchorPoint,
+      tool: polygon.tool,
       gestureCallbacks: gestureCallbacks,
     );
     return;
   }
 
-  final scaledVertices = shape.calculateScaledVertices();
+  final scaledVertices = polygon.calculateScaledVertices();
 
   final path = Path()
     ..moveTo(
@@ -248,7 +248,7 @@ void _drawShape(
       scaledVertices.first.y,
     );
 
-  for (var i = 1; i < shape.shapeTemplate.vertices.length; i++) {
+  for (var i = 1; i < polygon.polygonTemplate.vertices.length; i++) {
     path.lineTo(
       scaledVertices[i].x,
       scaledVertices[i].y,
@@ -257,13 +257,13 @@ void _drawShape(
 
   path.close();
 
-  if (shape.tool == Tool.tape) {
+  if (polygon.tool == Tool.tape) {
     final shadowPath = path.shift(
       Offset(
-        // TODO(Jei-sKappa): Consider using same X/Y shadowOffsetMultiplier for all shapes
-        // to have more pleasant shadows effect on some shapes.
-        shape.width * _shadowXOffsetMultiplier,
-        shape.width * _shadowYOffsetMultiplier,
+        // TODO(Jei-sKappa): Consider using same X/Y shadowOffsetMultiplier for all polygons
+        // to have more pleasant shadows effect on some polygons.
+        polygon.width * _shadowXOffsetMultiplier,
+        polygon.width * _shadowYOffsetMultiplier,
       ),
     );
     TouchyCanvasHelper.drawPath(
@@ -274,8 +274,8 @@ void _drawShape(
     );
   }
 
-  // TODO(Jei-sKappa): Check if is required to draw filled shape or not
-  final paint = shape.tool.getPaint(color: Color(shape.color));
+  // TODO(Jei-sKappa): Check if is required to draw filled polygon or not
+  final paint = polygon.tool.getPaint(color: Color(polygon.color));
   TouchyCanvasHelper.drawPath(
     canvas,
     path,
@@ -342,7 +342,7 @@ Path? _getPathFromPoints(
 /// An extension for drawinging Scribble specific [Sketch]s on a canvas.
 ///
 /// Provides the method [drawPoint], [drawFreeDrawing],
-/// [drawStraightLine], [drawShape] and [drawSketchDrawing].
+/// [drawStraightLine], [drawPolygon] and [drawSketchDrawing].
 extension TouchyCanvasScribbleDrawings on TouchyCanvas {
   /// {@macro scribble.canvas.draw_point}
   void drawPoint({
@@ -366,7 +366,7 @@ extension TouchyCanvasScribbleDrawings on TouchyCanvas {
   /// {@macro scribble.canvas.draw_sketch_drawing}
   /// - [FreeSketchDrawing]s are drawn using [drawFreeDrawing].
   /// - [LineSketchDrawing]s are drawn using [drawStraightLine].
-  /// - [ShapeSketchDrawing]s are drawn using [drawShape].
+  /// - [PolygonSketchDrawing]s are drawn using [drawPolygon].
   void drawSketchDrawing(
     SketchDrawing drawing, {
     required double scaleFactor,
@@ -409,14 +409,14 @@ extension TouchyCanvasScribbleDrawings on TouchyCanvas {
         gestureCallbacks: gestureCallbacks,
       );
 
-  /// {@macro scribble.canvas.draw_shape}
-  void drawShape(
-    ShapeSketchDrawing shape, {
+  /// {@macro scribble.canvas.draw_polygon}
+  void drawPolygon(
+    PolygonSketchDrawing polygon, {
     required double scaleFactor,
     GestureCallbacks? gestureCallbacks,
   }) =>
-      _drawShape(
-        shape,
+      _drawPolygon(
+        polygon,
         canvas: this,
         scaleFactor: scaleFactor,
         gestureCallbacks: gestureCallbacks,
@@ -445,7 +445,7 @@ extension CanvasScribbleDrawings on Canvas {
   /// {@macro scribble.canvas.draw_sketch_drawing}
   /// - [FreeSketchDrawing]s are drawn using [drawFreeDrawing].
   /// - [LineSketchDrawing]s are drawn using [drawStraightLine].
-  /// - [ShapeSketchDrawing]s are drawn using [drawShape].
+  /// - [PolygonSketchDrawing]s are drawn using [drawPolygon].
   void drawSketchDrawing(
     SketchDrawing drawing, {
     required double scaleFactor,
@@ -485,13 +485,13 @@ extension CanvasScribbleDrawings on Canvas {
         gestureCallbacks: null,
       );
 
-  /// {@macro scribble.canvas.draw_shape}
-  void drawShape(
-    ShapeSketchDrawing shape, {
+  /// {@macro scribble.canvas.draw_polygon}
+  void drawPolygon(
+    PolygonSketchDrawing polygon, {
     required double scaleFactor,
   }) =>
-      _drawShape(
-        shape,
+      _drawPolygon(
+        polygon,
         canvas: this,
         scaleFactor: scaleFactor,
         gestureCallbacks: null,

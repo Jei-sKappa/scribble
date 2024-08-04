@@ -51,21 +51,21 @@ sealed class SketchDrawing with _$SketchDrawing {
     @Default(Tool.pen) Tool tool,
   }) = LineSketchDrawing;
 
-  /// The [SketchDrawing] when the user is drawing a shape on the canvas.
-  const factory SketchDrawing.shape({
+  /// The [SketchDrawing] when the user is drawing a polygon on the canvas.
+  const factory SketchDrawing.polygon({
     /// The id of the drawing
     required Object id,
 
-    /// The starting point of the shape
+    /// The starting point of the polygon
     required Point anchorPoint,
 
-    /// The end point of the shape
+    /// The end point of the polygon
     required Point endPoint,
 
-    /// The shape template used to draw the shape
-    required ShapeTemplate shapeTemplate,
+    /// The polygon template used to draw the polygon
+    required PolygonTemplate polygonTemplate,
 
-    /// Whether the shape is filled or not
+    /// Whether the polygon is filled or not
     required bool isFilled,
 
     /// The color of the line in hexadecimal format (ARGB)
@@ -76,7 +76,7 @@ sealed class SketchDrawing with _$SketchDrawing {
 
     /// The tool used to draw the line
     @Default(Tool.pen) Tool tool,
-  }) = ShapeSketchDrawing;
+  }) = PolygonSketchDrawing;
 
   /// Constructs a [SketchDrawing] from a JSON object.
   factory SketchDrawing.fromJson(Map<String, dynamic> json) =>

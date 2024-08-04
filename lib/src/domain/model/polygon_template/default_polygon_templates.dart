@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:scribble/scribble.dart';
 
-// TODO: ShapeTemplate should not use Point with pressure
+// TODO: PolygonTemplate should not use Point with pressure
 
-/// The [ShapeTemplate] for a square shape.
-const squareShape = ShapeTemplate(
+/// The [PolygonTemplate] for a square polygon.
+const squarePolygon = PolygonTemplate(
   vertices: [
     Point(0, 0),
     Point(0, 500),
@@ -13,23 +13,22 @@ const squareShape = ShapeTemplate(
     Point(500, 0),
   ],
   maintainAspectRatio: true,
-  details: ShapeTemplateDetails(
+  details: PolygonTemplateDetails(
     size: Size(500, 500),
     minX: 0,
     minY: 0,
   ),
 );
 
-
-/// The [ShapeTemplate] for a isosceles triangle shape.
-const isoscelesTriangleShape = ShapeTemplate(
+/// The [PolygonTemplate] for a isosceles triangle polygon.
+const isoscelesTrianglePolygon = PolygonTemplate(
   vertices: [
     Point(0, 0),
     Point(3, 5),
     Point(-3, 5),
   ],
   maintainAspectRatio: true,
-  details: ShapeTemplateDetails(
+  details: PolygonTemplateDetails(
     size: Size(6, 5),
     minX: -3,
     minY: 0,

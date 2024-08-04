@@ -32,10 +32,10 @@ _$DrawingImpl _$$DrawingImplFromJson(Map<String, dynamic> json) =>
           (json['simplificationTolerance'] as num?)?.toDouble() ?? 0,
       selectedTool:
           $enumDecodeNullable(_$ToolEnumMap, json['selectedTool']) ?? Tool.pen,
-      selectedShape: json['selectedShape'] == null
+      selectedPolygon: json['selectedPolygon'] == null
           ? null
-          : ShapeTemplate.fromJson(
-              json['selectedShape'] as Map<String, dynamic>),
+          : PolygonTemplate.fromJson(
+              json['selectedPolygon'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 
@@ -53,14 +53,14 @@ Map<String, dynamic> _$$DrawingImplToJson(_$DrawingImpl instance) =>
       'scaleFactor': instance.scaleFactor,
       'simplificationTolerance': instance.simplificationTolerance,
       'selectedTool': _$ToolEnumMap[instance.selectedTool]!,
-      'selectedShape': instance.selectedShape?.toJson(),
+      'selectedPolygon': instance.selectedPolygon?.toJson(),
       'runtimeType': instance.$type,
     };
 
 const _$DrawModeEnumMap = {
   DrawMode.free: 'free',
   DrawMode.line: 'line',
-  DrawMode.shape: 'shape',
+  DrawMode.polygon: 'polygon',
 };
 
 const _$ScribblePointerModeEnumMap = {
@@ -97,10 +97,10 @@ _$ErasingImpl _$$ErasingImplFromJson(Map<String, dynamic> json) =>
           (json['simplificationTolerance'] as num?)?.toDouble() ?? 0,
       selectedTool:
           $enumDecodeNullable(_$ToolEnumMap, json['selectedTool']) ?? Tool.pen,
-      selectedShape: json['selectedShape'] == null
+      selectedPolygon: json['selectedPolygon'] == null
           ? null
-          : ShapeTemplate.fromJson(
-              json['selectedShape'] as Map<String, dynamic>),
+          : PolygonTemplate.fromJson(
+              json['selectedPolygon'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 
@@ -116,6 +116,6 @@ Map<String, dynamic> _$$ErasingImplToJson(_$ErasingImpl instance) =>
       'scaleFactor': instance.scaleFactor,
       'simplificationTolerance': instance.simplificationTolerance,
       'selectedTool': _$ToolEnumMap[instance.selectedTool]!,
-      'selectedShape': instance.selectedShape?.toJson(),
+      'selectedPolygon': instance.selectedPolygon?.toJson(),
       'runtimeType': instance.$type,
     };

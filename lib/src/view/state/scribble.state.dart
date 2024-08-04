@@ -80,8 +80,8 @@ sealed class ScribbleState with _$ScribbleState {
     /// The currently selected tool
     @Default(Tool.pen) Tool selectedTool,
 
-    /// The currently selected shape
-    ShapeTemplate? selectedShape,
+    /// The currently selected polygon
+    PolygonTemplate? selectedPolygon,
   }) = Drawing;
 
   // TODO: Erasing state should not have drawing properties to save them for later but insted the drawing properties should be saved in the notifier when changing from drawing to erasing.
@@ -122,8 +122,8 @@ sealed class ScribbleState with _$ScribbleState {
     /// The currently selected tool
     @Default(Tool.pen) Tool selectedTool,
 
-    /// The currently selected shape
-    ShapeTemplate? selectedShape,
+    /// The currently selected polygon
+    PolygonTemplate? selectedPolygon,
   }) = Erasing;
 
   /// Constructs a [ScribbleState] from a JSON object.

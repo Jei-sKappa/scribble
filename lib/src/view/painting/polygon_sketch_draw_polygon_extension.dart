@@ -2,16 +2,16 @@ import 'dart:math' hide Point;
 import 'dart:ui';
 
 import 'package:scribble/src/domain/model/point/point.dart';
-import 'package:scribble/src/domain/model/shape_template/shape_template.dart';
+import 'package:scribble/src/domain/model/polygon_template/polygon_template.dart';
 import 'package:scribble/src/domain/model/sketch_drawing/sketch_drawing.dart';
 
-extension ShapeSketchDrawScaledPolygon on ShapeSketchDrawing {
+extension PolygonSketchDrawScaledPolygon on PolygonSketchDrawing {
   List<Point> calculateScaledVertices() {
-    final vertices = shapeTemplate.vertices;
+    final vertices = polygonTemplate.vertices;
 
-    final shapeDetails = shapeTemplate.details ??
+    final polygonDetails = polygonTemplate.details ??
         () {
-          // Calculate the size and bounds of the shape
+          // Calculate the size and bounds of the polygon
           late double minX;
           late double maxX;
           late double minY;
@@ -30,10 +30,10 @@ extension ShapeSketchDrawScaledPolygon on ShapeSketchDrawing {
               maxY = max(maxY, vertex.y);
             }
           }
-          final shapeWidth = maxX - minX;
-          final shapeHeight = maxY - minY;
-          return ShapeTemplateDetails(
-            size: Size(shapeWidth, shapeHeight),
+          final polygonWidth = maxX - minX;
+          final polygonHeight = maxY - minY;
+          return PolygonTemplateDetails(
+            size: Size(polygonWidth, polygonHeight),
             minX: minX,
             minY: minY,
           );
@@ -44,27 +44,27 @@ extension ShapeSketchDrawScaledPolygon on ShapeSketchDrawing {
     final dy = endPoint.y - anchorPoint.y;
 
     // Calculate the scale factor for the x and y axis
-    var scaleX = dx / shapeDetails.size.width;
-    var scaleY = dy / shapeDetails.size.height;
+    var scaleX = dx / polygonDetails.size.width;
+    var scaleY = dy / polygonDetails.size.height;
 
     // If the aspect ratio should be maintained, use the smaller scale factor
     // for both the x and y axis
-    if (shapeTemplate.maintainAspectRatio) {
+    if (polygonTemplate.maintainAspectRatio) {
       final double scale = min(scaleX.abs(), scaleY.abs());
       scaleX = scaleX.isNegative ? -scale : scale;
       scaleY = scaleY.isNegative ? -scale : scale;
     }
 
     // Calculate the scaled vertices
-    // The shapeDetails.mins are used to allow also negative values
-    // in the shape template definition.
+    // The polygonDetails.mins are used to allow also negative values
+    // in the polygon template definition.
     final scaledVertices = <Point>[];
     for (var i = 0; i < vertices.length; i++) {
       final vertex = vertices[i];
       scaledVertices.add(
         Point(
-          anchorPoint.x + (vertex.x - shapeDetails.minX) * scaleX,
-          anchorPoint.y + (vertex.y - shapeDetails.minY) * scaleY,
+          anchorPoint.x + (vertex.x - polygonDetails.minX) * scaleX,
+          anchorPoint.y + (vertex.y - polygonDetails.minY) * scaleY,
         ),
       );
     }

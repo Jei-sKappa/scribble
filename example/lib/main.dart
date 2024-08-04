@@ -37,9 +37,9 @@ class _HomePageState extends State<HomePage> {
 
   bool _simulatePressure = true;
 
-  final availableShapesIconsTuple = <(ShapeTemplate, IconData)>[
-    (squareShape, Icons.square),
-    (isoscelesTriangleShape, Icons.change_history),
+  final availablePolygonsIconsTuple = <(PolygonTemplate, IconData)>[
+    (squarePolygon, Icons.square),
+    (isoscelesTrianglePolygon, Icons.change_history),
   ];
 
   @override
@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                         const VerticalDivider(width: 32),
                         _buildToolToolbar(context),
                         const VerticalDivider(width: 32),
-                        _buildShapeToolbar(context),
+                        _buildPolygonToolbar(context),
                         const VerticalDivider(width: 32),
                         _buildDrawModeToolbar(context),
                         Row(
@@ -323,7 +323,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildShapeToolbar(BuildContext context) {
+  Widget _buildPolygonToolbar(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: notifier.select((value) => value is Drawing),
       builder: (context, value, child) => Row(
@@ -331,11 +331,11 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (final shapeIconTuple in availableShapesIconsTuple)
-            _buildShapeButton(
+          for (final polygonIconTuple in availablePolygonsIconsTuple)
+            _buildPolygonButton(
               context,
-              shape: shapeIconTuple.$1,
-              icon: shapeIconTuple.$2,
+              polygon: polygonIconTuple.$1,
+              icon: polygonIconTuple.$2,
             ),
         ],
       ),
@@ -449,14 +449,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildShapeButton(
+  Widget _buildPolygonButton(
     BuildContext context, {
-    required ShapeTemplate shape,
+    required PolygonTemplate polygon,
     required IconData icon,
   }) {
     return ValueListenableBuilder(
       valueListenable: notifier.select(
-        (value) => value is Drawing && value.selectedShape == shape,
+        (value) => value is Drawing && value.selectedPolygon == polygon,
       ),
       builder: (context, value, child) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -464,7 +464,7 @@ class _HomePageState extends State<HomePage> {
           color: Colors.transparent,
           outlineColor: Colors.black,
           isActive: value,
-          onPressed: () => notifier.setShape(shape),
+          onPressed: () => notifier.setPolygon(polygon),
           child: Icon(icon),
         ),
       ),
@@ -489,7 +489,7 @@ class _HomePageState extends State<HomePage> {
             child: switch (drawMode) {
               DrawMode.free => const Icon(Icons.edit),
               DrawMode.line => const Icon(Icons.show_chart),
-              DrawMode.shape => const Icon(Icons.crop_square),
+              DrawMode.polygon => const Icon(Icons.crop_square),
             }),
       ),
     );
